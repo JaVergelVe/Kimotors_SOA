@@ -30,9 +30,9 @@ npm start
 
 ### Ramas del proyecto
 
-Main
-└── Develop
-    ├── Feature_Emilio
+Main<br>
+└── Develop<br>
+    ├── Feature_Emilio<br>
     └── Feature_Julian
 
 ## Enlace con Jira
