@@ -28,12 +28,12 @@ git clone https://github.com/tuusuario/Kimotors_SOA.git
 npm start
 ```
 
-# Ramas del proyecto
+### Ramas del proyecto
 
-- Main
- -Develop
-  -Feature_Emilio
-  -Feature_Julian
+Main
+└── Develop
+    ├── Feature_Emilio
+    └── Feature_Julian
 
 ## Enlace con Jira
 
