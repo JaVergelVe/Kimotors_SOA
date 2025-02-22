@@ -19,14 +19,27 @@ Kimotors_PDN es una aplicación web que permite a los usuarios explorar una ampl
 ### Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/Kimotors_PDN.git
+git clone https://github.com/tuusuario/Kimotors_SOA.git
 ```
+
+### Iniciar el proyecto
+
+```bash
+npm start
+```
+
+### Ramas del proyecto
+
+- Main
+    -Develop
+        -Feature_Emilio
+        -Feature_Julian
 
 ## Enlace con Jira
 
-Este proyecto está vinculado al tablero de Jira: Kimotors_PDN para la gestión ágil del desarrollo.
+Este proyecto está vinculado al tablero de Jira: Kimotors_SOA para la gestión ágil del desarrollo.
 
-### Colaboradores
+## Colaboradores
 
-- Juan Jose Quin
+- Jesus Emilio
 - Julian Andres Vergel
