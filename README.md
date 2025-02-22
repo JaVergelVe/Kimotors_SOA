@@ -1,6 +1,6 @@
-# Kimotors_PDN
+# Kimotors
 
-Kimotors_PDN es una aplicación web que permite a los usuarios explorar una amplia variedad de motocicletas, consultar información detallada sobre cada modelo, realizar comparaciones entre motos y dejar comentarios sobre su experiencia.
+Kimotors es una aplicación web que permite a los usuarios explorar una amplia variedad de motocicletas, consultar información detallada sobre cada modelo, realizar comparaciones entre motos y dejar comentarios sobre su experiencia.
 
 ## Tecnologías utilizadas
 
@@ -28,12 +28,12 @@ git clone https://github.com/tuusuario/Kimotors_SOA.git
 npm start
 ```
 
-### Ramas del proyecto
+# Ramas del proyecto
 
 - Main
-    -Develop
-        -Feature_Emilio
-        -Feature_Julian
+ -Develop
+  -Feature_Emilio
+  -Feature_Julian
 
 ## Enlace con Jira
 
