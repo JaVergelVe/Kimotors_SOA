@@ -41,5 +41,5 @@ Este proyecto está vinculado al tablero de Jira: Kimotors_SOA para la gestión 
 
 ## Colaboradores
 
-- Jesus Emilio
+- Jesus Emilio Osorio
 - Julian Andres Vergel
