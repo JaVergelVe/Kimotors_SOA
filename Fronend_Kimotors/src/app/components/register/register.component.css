@@ -54,3 +54,17 @@
 .register-form a:hover {
     text-decoration: underline;
 }
+
+.is-invalid {
+    border: 1px solid red;
+}
+
+.invalid-feedback {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
