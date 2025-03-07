@@ -1,0 +1,23 @@
+header{
+    display: flex;
+    gap: 10px;
+    background-color: aquamarine;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    flex-direction: column;
+    width: 100%;
+}
+.vm{
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.vs{
+    background-color: blueviolet;
+    display: flex;
+
+    margin: 0 1%;
+}
