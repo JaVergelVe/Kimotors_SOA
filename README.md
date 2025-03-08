@@ -9,6 +9,8 @@ Kimotors es una aplicación web que permite a los usuarios explorar una amplia v
 - **MongoDB** (Base de datos NoSQL)
 - **SQL** (Opcional para ciertos módulos o funcionalidades específicas)
 
+
+
 ## Características principales
 
 - Exploración de diferentes tipos de motocicletas.
@@ -20,6 +22,24 @@ Kimotors es una aplicación web que permite a los usuarios explorar una amplia v
 
 ```bash
 git clone https://github.com/tuusuario/Kimotors_SOA.git
+```
+
+### Instalación de angular
+
+```bash
+npm install -g @angular/cli
+```
+
+### Verificar version de Angular
+
+```bash
+ng version
+```
+
+### Verificar version de Node
+
+```bash
+node -v
 ```
 
 ### Iniciar el proyecto
