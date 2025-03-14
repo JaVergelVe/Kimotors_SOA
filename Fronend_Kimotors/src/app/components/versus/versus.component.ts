@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { MainPageComponent } from '../components/main-page/main-page.component';
+import { MainPageComponent } from '../main-page/main-page.component';
 
 @Component({
   selector: 'app-versus',
