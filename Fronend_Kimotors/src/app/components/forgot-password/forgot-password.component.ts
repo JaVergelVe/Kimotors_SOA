@@ -1,25 +1,41 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule],
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css']
+  styleUrl: './forgot-password.component.css',
 })
-export class ForgotPasswordComponent {
-  email: string = '';
+export class ForgotPasswordComponent implements OnInit {
+  forgotPasswordForm!: FormGroup;
+  submitted = false;
   message: string = '';
 
-  constructor() {}
+  constructor(private formBuilder: FormBuilder) {}
+
+  ngOnInit() {
+    this.forgotPasswordForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]], 
+    });
+  }
+
+  get f() {
+    return this.forgotPasswordForm.controls;
+  }
 
   onSubmit() {
-    if (!this.email) {
-      this.message = 'Por favor, ingresa tu correo electrónico.';
+    this.submitted = true;
+
+    if (this.forgotPasswordForm.invalid) {
       return;
     }
+
+    console.log('Formulario válido:', this.forgotPasswordForm.value);
+    this.message = 'Contraseña restablecida correctamente';
   }
 }
