@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,10 +11,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   submitted = false;
+
+  private authService = inject(AuthService);
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -24,17 +26,23 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  get f() { 
-    return this.loginForm.controls; 
+  // Iniciar sesión con Google
+  async loginWithGoogle() {
+    await this.authService.loginWithGoogle();
   }
 
-  onSubmit() {
+  get f() {
+    return this.loginForm.controls;
+  }
+
+  async onSubmit() {
     this.submitted = true;
 
     if (this.loginForm.invalid) {
       return;
     }
 
-    console.log('Formulario válido:', this.loginForm.value);
+    const { email, password } = this.loginForm.value;
+    await this.authService.login(email, password);
   }
 }

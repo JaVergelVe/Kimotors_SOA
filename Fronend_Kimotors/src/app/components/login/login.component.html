@@ -2,31 +2,44 @@
     <div class="login-form">
         <h2>Iniciar Sesión</h2>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-                <input type="text" formControlName="email" placeholder="Correo electrónico" 
-                       [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
-                <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-                    <div *ngIf="f['email'].errors['required']">El correo electrónico es obligatorio</div>
-                    <div *ngIf="f['email'].errors['email']">Ingresa un correo electrónico válido</div>
-                </div>
+        <div class="form-group">
+            <input
+            type="text"
+            formControlName="email"
+            placeholder="Correo electrónico"
+            [ngClass]="{ 'is-invalid': f['email'].errors && f['email'].touched }"
+            />
+            <div *ngIf="f['email'].errors && f['email'].touched" class="invalid-feedback">
+            <div *ngIf="f['email'].errors['required']">El correo es obligatorio.</div>
+            <div *ngIf="f['email'].errors['email']">Correo no válido.</div>
             </div>
-            
-            <div class="form-group">
-                <input type="password" formControlName="password" placeholder="Contraseña"
-                       [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-                <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-                    <div *ngIf="f['password'].errors['required']">La contraseña es obligatoria</div>
-                </div>
+        </div>
+
+        <div class="form-group">
+            <input
+            type="password"
+            formControlName="password"
+            placeholder="Contraseña"
+            [ngClass]="{ 'is-invalid': f['password'].errors && f['password'].touched }"
+            />
+            <div *ngIf="f['password'].errors && f['password'].touched" class="invalid-feedback">
+            <div *ngIf="f['password'].errors['required']">La contraseña es obligatoria.</div>
             </div>
-            
-            <button type="submit">Iniciar Sesión</button>
+        </div>
+
+        <button type="submit">Iniciar Sesión</button>
         </form>
-        <p>¿Has olvidado tu contraseña?</p>
-        <a routerLink="/forgot-password">Restablece la contraseña aquí</a>
-        <p>¿No tienes una cuenta?</p>
+
+        <br />
+        <button (click)="loginWithGoogle()">Iniciar con Google</button>
+
+        <p>¿Olvidaste tu contraseña?</p>
+        <a routerLink="/forgot-password">Recuperar aquí</a>
+
+        <p>¿No tienes cuenta?</p>
         <a routerLink="/register">Regístrate aquí</a>
-        <br>
-        <br>
-        <a routerLink="">Volver al inicio</a>
+
+        <br /><br />
+        <a routerLink="/">Volver al inicio</a>
     </div>
 </div>
