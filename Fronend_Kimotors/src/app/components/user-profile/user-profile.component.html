@@ -1,0 +1,12 @@
+<div class="user-info-container">
+    <h2>Información del Usuario</h2>
+  
+    <div class="user-detail">
+      <p><strong>Nombre:</strong> {{ user?.displayName || 'N/A' }}</p>
+      <p><strong>Correo:</strong> {{ user?.email }}</p>
+    </div>
+  
+    <button (click)="logout()">Cerrar Sesión</button>
+  
+    <button (click)="navigateToHome()">Ir al Inicio</button>
+</div>
