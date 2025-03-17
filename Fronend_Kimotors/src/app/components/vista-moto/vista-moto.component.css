@@ -1,0 +1,62 @@
+.contsvg{
+    cursor: pointer;
+}
+header{
+    display: flex;
+    gap: 10px;
+    background-color: aquamarine;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    flex-direction: column;
+    width: 100%;
+}
+.vista-moto{
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #E3DAC9;
+}
+.read{
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    gap: 2px;
+}
+.fotos{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+    height: 100%;
+    background-color: #b6beac;
+}
+.imagen{
+    width: 40%;
+    height: 100%;
+    background-color: #bcf47d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.contenido{
+    width: 50%;
+    background-color: #f3a3fa;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    justify-content: center;
+    align-items: center;
+}
+.lateral{
+    height: 70px;
+    width: 70px;
+    background-color: blue;
+}

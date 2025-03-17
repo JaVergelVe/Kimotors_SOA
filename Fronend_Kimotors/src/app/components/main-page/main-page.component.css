@@ -46,3 +46,9 @@ a{
 .divdisplay{
     cursor: pointer;
 }
+.logo{
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}

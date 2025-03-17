@@ -45,6 +45,7 @@ header{
 }
 .foto{
     background: #000;
+    height: 100px;
 }
 .caracteristicas{
     display: flex;
