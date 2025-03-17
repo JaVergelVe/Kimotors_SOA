@@ -18,6 +18,37 @@ header{
 .vs{
     background-color: blueviolet;
     display: flex;
-
     margin: 0 1%;
+    width: 95%;
+}
+.contsvg{
+    cursor: pointer;
+}
+
+.div1{
+    width: 25%;
+    background-color: #E3DAC9;
+    display: flex;
+    gap: 1px;
+    flex-direction: column;
+
+    /*
+    box-sizing: border-box;
+    */
+}
+.div2{
+    width: 75%;
+    background-color: #f09a87;
+    /*
+    box-sizing: border-box;
+    */
+}
+.foto{
+    background: #000;
+}
+.caracteristicas{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

@@ -37,3 +37,12 @@ a{
 .contenedorMovido{
     transform: translateX(0);
 }
+.rutversus{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+}
+.divdisplay{
+    cursor: pointer;
+}
