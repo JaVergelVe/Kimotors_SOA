@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService, User } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -14,8 +15,9 @@ import { CommonModule } from '@angular/common';
 export class RegisterComponent implements OnInit{
   registerForm!: FormGroup;
   submitted = false;
+  errorMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -52,6 +54,21 @@ export class RegisterComponent implements OnInit{
       return;
     }
 
-    console.log('Formulario de registro válido:', this.registerForm.value);
+    const newUser: User = {
+      username: this.registerForm.value.username,
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password,
+    };
+
+    this.authService.registerUser(newUser).subscribe({
+      next: () => {
+        alert('Usuario registrado con éxito');
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error al registrar el usuario:', error);
+        alert('Error al registrar el usuario. Intenta de nuevo.');
+      }
+    });
   }
 }
