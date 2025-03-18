@@ -7,6 +7,7 @@ header{
     padding: 10px;
     flex-direction: column;
     width: 100%;
+    box-sizing: border-box;
 }
 .vm{
     gap: 10px;
@@ -16,28 +17,29 @@ header{
     align-items: center;
 }
 .vs{
-    background-color: blueviolet;
     display: flex;
     margin: 0 1%;
-    width: 95%;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 .contsvg{
     cursor: pointer;
 }
 
 .div1{
-    width: 25%;
+    flex: 1 0 0;
     background-color: #E3DAC9;
     display: flex;
     gap: 1px;
     flex-direction: column;
-
+    max-width: 350px;
     /*
     box-sizing: border-box;
     */
 }
 .div2{
-    width: 75%;
+    flex: 1.5 0 0;
     background-color: #f09a87;
     /*
     box-sizing: border-box;
