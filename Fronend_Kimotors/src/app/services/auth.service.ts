@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface User {
   id?: string;
@@ -17,22 +18,36 @@ export class AuthService {
 
   constructor(private auth: Auth, private router: Router, private http: HttpClient) {}
 
-  // 🔹 Obtener un usuario por su email
+  // Obtener un usuario por su email
   getUserByEmail(email: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/email/${email}`);
   }
 
-  // 🔹 Registrar un nuevo usuario
+  // Registrar un nuevo usuario
   registerUser(user: User): Observable<User> {
     return this.http.post<User>(this.apiUrl, user);
   }
 
-  // 🔹 Actualizar la contraseña de un usuario
-  updatePassword(email: string, newPassword: string): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/update-password`, {
-      email,
-      newPassword,
+  // Actualizar la contraseña de un usuario
+  updatePassword(email: string, newPassword: string): Observable<string> {
+    const params = new HttpParams()
+      .set('email', email)
+      .set('newPassword', newPassword);
+  
+    return this.http.patch(`${this.apiUrl}/password`, {}, {
+      params,
+      responseType: 'text'
     });
+  }
+
+  deleteUser(email: string): Observable<void> {
+    const url = `${this.apiUrl}/email/${email}`;
+    return this.http.delete<void>(url).pipe(
+      catchError((error: any) => {
+        console.error('Error al eliminar el usuario:', error);
+        return throwError(() => new Error('Error al eliminar el usuario.'));
+      })
+    );
   }
 
   // Iniciar sesión con Google

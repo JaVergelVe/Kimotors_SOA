@@ -22,12 +22,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   getUserInfo(): void {
-    // 🔍 Intentamos obtener el usuario autenticado de Firebase (Google)
+    // Intentamos obtener el usuario autenticado de Firebase (Google)
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
       this.user = currentUser;
 
-      // ✅ Si es un usuario de Google (Firebase), usamos displayName
+      // Si es un usuario de Google (Firebase), usamos displayName
       if ('displayName' in currentUser) {
         this.username = currentUser.displayName || 'Usuario de Google';
       }
@@ -35,24 +35,44 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    // 📦 Si no es un usuario de Google, buscamos en localStorage (correo/contraseña)
+    // Si no es un usuario de Google, buscamos en localStorage (correo/contraseña)
     const localUser = localStorage.getItem('currentUser');
     if (localUser) {
       const parsedUser: User = JSON.parse(localUser);
       this.user = parsedUser;
-      this.username = parsedUser.username; // Mostramos el username del backend
+      this.username = parsedUser.username;
       return;
     }
 
-    // 🚫 Si no hay un usuario autenticado, redirigimos al login
+    // Si no hay un usuario autenticado, redirigimos al login
     console.warn('No hay un usuario autenticado.');
     this.router.navigate(['/login']);
   }
 
   async logout(): Promise<void> {
     await this.authService.logout();
-    localStorage.removeItem('currentUser'); // Limpiar el usuario almacenado
+    localStorage.removeItem('currentUser');
     this.router.navigate(['/']);
+  }
+
+  deleteUser(): void {
+    if (!this.user || !this.user.email) {
+      console.error('No se encontró un email válido.');
+      return;
+    }
+  
+    console.log('Enviando solicitud para eliminar el usuario con email:', this.user.email);
+  
+    this.authService.deleteUser(this.user.email).subscribe({
+      next: () => {
+        console.log('Usuario eliminado exitosamente');
+        localStorage.removeItem('currentUser');
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Error en la eliminación del usuario:', err);
+      },
+    });
   }
 
   navigateToHome() {
