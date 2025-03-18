@@ -1,10 +1,39 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+
+export interface User {
+  id?: string;
+  username: string;
+  email: string;
+  password?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private auth: Auth, private router: Router) {}
+  private apiUrl = 'http://localhost:8080/usuarios';
+
+  constructor(private auth: Auth, private router: Router, private http: HttpClient) {}
+
+  // 🔹 Obtener un usuario por su email
+  getUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/email/${email}`);
+  }
+
+  // 🔹 Registrar un nuevo usuario
+  registerUser(user: User): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
+  }
+
+  // 🔹 Actualizar la contraseña de un usuario
+  updatePassword(email: string, newPassword: string): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/update-password`, {
+      email,
+      newPassword,
+    });
+  }
 
   // Iniciar sesión con Google
   async loginWithGoogle() {
@@ -18,17 +47,7 @@ export class AuthService {
     }
   }
 
-  // Iniciar sesión con email y password
-  async login(email: string, password: string): Promise<void> {
-    try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      console.log('Usuario autenticado:', userCredential.user);
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      alert('Error al iniciar sesión. Verifique sus credenciales.');
-    }
-  }
-
+  // Cerrar sesion
   async logout(): Promise<void> {
     try {
       await this.auth.signOut();
