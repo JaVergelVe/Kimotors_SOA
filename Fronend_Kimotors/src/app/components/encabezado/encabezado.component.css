@@ -34,9 +34,6 @@ a{
     transition: transform 0.3s;
 
 }
-.contenedorMovido{
-    transform: translateX(0);
-}
 .rutversus{
     display: flex;
     justify-content: center;
