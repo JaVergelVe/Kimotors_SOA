@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,30 +16,21 @@ export class ForgotPasswordComponent implements OnInit {
   submitted = false;
   message: string = '';
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]], 
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmNewPassword: ['', [Validators.required, Validators.minLength(6)]],
-    }, {
-      validators: this.passwordMatchValidator
-    }
-  ); 
+    }, { validators: this.passwordMatchValidator });
   }
 
   // Función para validar que las contraseñas coincidan
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password')?.value;
-    const confirmPassword = control.get('confirmPassword')?.value;
-
-    if (password !== confirmPassword) {
-      control.get('confirmPassword')?.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    } else {
-      return null;
-    }
+    const password = control.get('newPassword')?.value;
+    const confirmPassword = control.get('confirmNewPassword')?.value;
+    return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
   get f() {
@@ -47,12 +39,22 @@ export class ForgotPasswordComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+  
     if (this.forgotPasswordForm.invalid) {
+      console.log('Errores en el formulario', this.forgotPasswordForm.errors);
       return;
     }
-
-    console.log('Formulario válido:', this.forgotPasswordForm.value);
-    this.message = 'Contraseña restablecida correctamente';
+  
+    const { email, newPassword } = this.forgotPasswordForm.value;
+  
+    this.authService.updatePassword(email, newPassword).subscribe({
+      next: () => {
+        setTimeout(() => this.router.navigate(['/login']));
+      },
+      error: (err) => {
+        this.message = 'Error al actualizar la contraseña: ' + (err.error?.message || 'Inténtalo de nuevo.');
+        console.error(err);
+      },
+    });
   }
 }

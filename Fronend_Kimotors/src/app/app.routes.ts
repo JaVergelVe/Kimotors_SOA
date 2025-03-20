@@ -6,6 +6,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { VersusComponent } from './components/versus/versus.component';
 import { VistaMotoComponent } from './components/vista-moto/vista-moto.component';
 import { EncabezadoComponent } from './components/encabezado/encabezado.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent, pathMatch: 'full' },
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'encabezado', component: EncabezadoComponent },
   { path: 'vista-moto', component: VistaMotoComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'user-porfile', component: UserProfileComponent },
   { path: '**', redirectTo: '' }
 ];
