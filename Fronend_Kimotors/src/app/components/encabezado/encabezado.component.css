@@ -48,4 +48,5 @@ a{
     gap: 2px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
