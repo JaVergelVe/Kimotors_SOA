@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #39397a;
+    background-color: #121A21;
 
 }
 .rd{
@@ -50,7 +50,7 @@ p{
 }
 .separador{
     height: 1px;
-    background-color: #9696da;
+    background-color: #94ADC7;
     width: 100%;
 }
 *{
@@ -66,5 +66,5 @@ p{
     max-width: 100%;
 }
 .p1{
-    color: #9696da;
+    color: #94ADC7;
 }
