@@ -55,24 +55,43 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  deleteUser(): void {
+  async deleteUser(): Promise<void> {
     if (!this.user || !this.user.email) {
       console.error('No se encontró un email válido.');
       return;
     }
   
-    console.log('Enviando solicitud para eliminar el usuario con email:', this.user.email);
+    const email = this.user.email;
   
-    this.authService.deleteUser(this.user.email).subscribe({
-      next: () => {
-        console.log('Usuario eliminado exitosamente');
+    // Verifica si el usuario proviene de Firebase
+    const isGoogleUser = 'providerData' in this.user && this.user.providerData.some(provider => provider.providerId === 'google.com');
+  
+    console.log('Eliminando usuario con email:', email);
+    console.log('Es usuario de Google:', isGoogleUser);
+  
+    if (isGoogleUser) {
+      // Eliminar cuenta de Firebase
+      try {
+        await this.authService.deleteFirebaseUser();
+        console.log('Usuario eliminado de Firebase exitosamente.');
         localStorage.removeItem('currentUser');
         this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error('Error en la eliminación del usuario:', err);
-      },
-    });
+      } catch (error) {
+        console.error('Error al eliminar usuario de Firebase:', error);
+      }
+    } else {
+      // Eliminar usuario de MongoDB
+      this.authService.deleteUser(email).subscribe({
+        next: () => {
+          console.log('Usuario eliminado de MongoDB exitosamente.');
+          localStorage.removeItem('currentUser');
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Error en la eliminación del usuario en MongoDB:', err);
+        },
+      });
+    }
   }
 
   navigateToHome() {

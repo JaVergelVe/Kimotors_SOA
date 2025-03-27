@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 export interface User {
   id?: string;
@@ -48,6 +48,21 @@ export class AuthService {
         return throwError(() => new Error('Error al eliminar el usuario.'));
       })
     );
+  }
+
+  async deleteFirebaseUser(): Promise<void> {
+    try {
+      const currentUser = this.auth.currentUser;
+      if (currentUser) {
+        await deleteUser(currentUser);
+        console.log('Cuenta de Firebase eliminada exitosamente.');
+      } else {
+        throw new Error('No se encontró un usuario autenticado en Firebase.');
+      }
+    } catch (error) {
+      console.error('Error al eliminar la cuenta de Firebase:', error);
+      throw error;
+    }
   }
 
   // Iniciar sesión con Google
