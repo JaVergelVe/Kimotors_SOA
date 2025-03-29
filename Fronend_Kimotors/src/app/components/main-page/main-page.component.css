@@ -1,54 +1,6 @@
-.header{
-    display: flex;
-    gap: 10px;
-    background-color: antiquewhite;
-    justify-content: space-between;
-    padding: 10px;
-    align-items: center;
-}
-a{
-    padding: 10px;
-    cursor: pointer;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 15px;
-    border-radius: 7px;
-    display: block;
-    color: black;
-    font-size: medium;
-    text-decoration: none;
-
-}
-.buscador{
-    border-radius: 7px;
-    border: none;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    padding: 5px;
-    outline: none;
-
-}
-.contenedor{
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-
-}
-.contenedorMovido{
-    transform: translateX(0);
-}
-.rutversus{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1px;
-}
-.divdisplay{
-    cursor: pointer;
-}
-.logo{
-    display: flex;
-    gap: 2px;
-    justify-content: center;
-    align-items: center;
+.separador{
+    height: 1px;
+    background-color: red;
+    width: 100%;
+    /*#94ADC  color*/
 }

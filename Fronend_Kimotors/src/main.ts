@@ -10,8 +10,8 @@ import { provideHttpClient } from '@angular/common/http';
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideAuth(() => getAuth()),
-    provideHttpClient()
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), //inicializar firebase
+    provideAuth(() => getAuth()), //autenticar
+    provideHttpClient() //conexiones de la base de datos con mongo
   ],
 }).catch((err) => console.error(err));
