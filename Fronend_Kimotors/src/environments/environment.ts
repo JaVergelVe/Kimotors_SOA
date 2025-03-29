@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
+    production: false, //no esta en produccion
     firebaseConfig: {
         apiKey: "AIzaSyD4yHO0Kv4PopPlGicxRF2PcX5em1zoTNU",
         authDomain: "kimotors.firebaseapp.com",

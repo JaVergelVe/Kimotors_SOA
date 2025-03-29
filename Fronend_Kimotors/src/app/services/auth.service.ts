@@ -6,6 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface User {
+  //guardar datos de los usuarios
   id?: string;
   username: string;
   email: string;
@@ -14,7 +15,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/usuarios';
+  private apiUrl = 'http://localhost:8080/usuarios'; //url del endpoint
 
   constructor(private auth: Auth, private router: Router, private http: HttpClient) {}
 
@@ -33,7 +34,7 @@ export class AuthService {
     const params = new HttpParams()
       .set('email', email)
       .set('newPassword', newPassword);
-  
+
     return this.http.patch(`${this.apiUrl}/password`, {}, {
       params,
       responseType: 'text'
@@ -49,10 +50,10 @@ export class AuthService {
       })
     );
   }
-
+  //borrar usuario de firebase
   async deleteFirebaseUser(): Promise<void> {
     try {
-      const currentUser = this.auth.currentUser;
+      const currentUser = this.auth.currentUser; //usuario
       if (currentUser) {
         await deleteUser(currentUser);
         console.log('Cuenta de Firebase eliminada exitosamente.');
@@ -86,7 +87,7 @@ export class AuthService {
       console.error('Error al cerrar sesión:', error);
     }
   }
-
+  // borrar usuario con firebase
   getCurrentUser() {
     return this.auth.currentUser;
   }
