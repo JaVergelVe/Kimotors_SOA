@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -17,7 +16,7 @@ export interface User {
 export class AuthService {
   private apiUrl = 'http://localhost:8080/usuarios'; //url del endpoint
 
-  constructor(private auth: Auth, private router: Router, private http: HttpClient) {}
+  constructor(private auth: Auth, private http: HttpClient) {}
 
   // Obtener un usuario por su email
   getUserByEmail(email: string): Observable<User> {
@@ -50,44 +49,7 @@ export class AuthService {
       })
     );
   }
-  //borrar usuario de firebase
-  async deleteFirebaseUser(): Promise<void> {
-    try {
-      const currentUser = this.auth.currentUser; //usuario
-      if (currentUser) {
-        await deleteUser(currentUser);
-        console.log('Cuenta de Firebase eliminada exitosamente.');
-      } else {
-        throw new Error('No se encontró un usuario autenticado en Firebase.');
-      }
-    } catch (error) {
-      console.error('Error al eliminar la cuenta de Firebase:', error);
-      throw error;
-    }
-  }
 
-  // Iniciar sesión con Google
-  async loginWithGoogle() {
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(this.auth, provider);
-      console.log('Usuario autenticado con Google:', result.user);
-      this.router.navigate(['/']);
-    } catch (error) {
-      console.error('Error al autenticar con Google:', error);
-    }
-  }
-
-  // Cerrar sesion
-  async logout(): Promise<void> {
-    try {
-      await this.auth.signOut();
-      console.log('Sesión cerrada exitosamente');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  }
-  // borrar usuario con firebase
   getCurrentUser() {
     return this.auth.currentUser;
   }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { AuthFirebaseService } from '../../services/authFireBase.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
 
   private authService = inject(AuthService);
+  private authFirebaseService = inject(AuthFirebaseService);
   private router = inject(Router);
 
   constructor(private formBuilder: FormBuilder) {}
@@ -29,7 +31,7 @@ export class LoginComponent implements OnInit {
 
   // Iniciar sesión con Google
   async loginWithGoogle() {
-    await this.authService.loginWithGoogle();
+    await this.authFirebaseService.loginWithGoogle();
   }
 
   get f() {
