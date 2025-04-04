@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
+import { AuthFirebaseService } from '../../services/authFireBase.service';
 import { User as FirebaseUser } from '@angular/fire/auth';
 
 @Component({
@@ -15,7 +16,7 @@ export class UserProfileComponent implements OnInit {
   user: User | FirebaseUser | null = null;
   username: string | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private authFirebaseService: AuthFirebaseService, private router: Router) {}
 
   ngOnInit(): void {
     this.getUserInfo();
@@ -50,7 +51,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   async logout(): Promise<void> {
-    await this.authService.logout();
+    await this.authFirebaseService.logout();
     localStorage.removeItem('currentUser');
     this.router.navigate(['/']);
   }
@@ -72,7 +73,7 @@ export class UserProfileComponent implements OnInit {
     if (isGoogleUser) {
       // Eliminar cuenta de Firebase
       try {
-        await this.authService.deleteFirebaseUser();
+        await this.authFirebaseService.deleteFirebaseUser();
         console.log('Usuario eliminado de Firebase exitosamente.');
         localStorage.removeItem('currentUser');
         this.router.navigate(['/']);
