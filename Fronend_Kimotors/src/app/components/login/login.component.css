@@ -72,3 +72,7 @@
 .form-group {
     margin-bottom: 1rem;
 }
+.aut {
+    display: flex;
+    gap: 15px;
+}
