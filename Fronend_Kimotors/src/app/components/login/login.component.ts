@@ -39,6 +39,11 @@ export class LoginComponent implements OnInit {
     await this.authFirebaseService.loginWithGithub();
   }
 
+  // Iniciar sesión con Facebook
+  async loginWithFacebook() {
+    await this.authFirebaseService.loginWithFacebook();
+  }
+
   get f() {
     return this.loginForm.controls;
   }
