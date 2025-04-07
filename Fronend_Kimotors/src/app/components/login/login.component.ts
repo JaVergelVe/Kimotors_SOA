@@ -34,11 +34,16 @@ export class LoginComponent implements OnInit {
     await this.authFirebaseService.loginWithGoogle();
   }
 
+  // Iniciar sesión con GitHub
+  async loginWithGithub() {
+    await this.authFirebaseService.loginWithGithub();
+  }
+
   get f() {
     return this.loginForm.controls;
   }
 
-  //  Iniciar sesión con email y contraseña
+  // Iniciar sesión con email y contraseña (MongoDB)
   async onSubmit() {
     this.submitted = true;
 

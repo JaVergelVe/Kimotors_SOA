@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser } from '@angular/fire/auth';
+import { Auth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, deleteUser } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -16,6 +16,18 @@ export class AuthFirebaseService {
       this.router.navigate(['/home']);
     } catch (error) {
       console.error('Error al autenticar con Google:', error);
+    }
+  }
+
+  // Iniciar sesión con GitHub
+  async loginWithGithub(): Promise<void> {
+    try {
+      const provider = new GithubAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      console.log('Usuario autenticado con GitHub:', result.user);
+      this.router.navigate(['/home']);
+    } catch (error) {
+      console.error('Error al autenticar con GitHub:', error);
     }
   }
 
