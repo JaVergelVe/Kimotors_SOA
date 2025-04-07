@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser, FacebookAuthProvider, GithubAuthProvider } from '@angular/fire/auth';
+import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser, FacebookAuthProvider, GithubAuthProvider, sendPasswordResetEmail, confirmPasswordReset } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { from, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFirebaseService {
@@ -72,5 +73,21 @@ export class AuthFirebaseService {
       console.error('Error al eliminar la cuenta de Firebase:', error);
       throw error;
     }
+  }
+
+  // Actualizar la contraseña de un usuario
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+      console.log('Correo de restablecimiento enviado correctamente');
+    } catch (error) {
+      console.error('Error al enviar el correo de restablecimiento:', error);
+      throw error;
+    }
+  }
+
+  // Método para restablecer contraseña con Firebase usando oobCode
+  resetPasswordWithFirebase(oobCode: string, newPassword: string): Observable<void> {
+    return from(confirmPasswordReset(this.auth, oobCode, newPassword));
   }
 }
