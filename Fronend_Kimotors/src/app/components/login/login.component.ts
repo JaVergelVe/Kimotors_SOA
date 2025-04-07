@@ -30,9 +30,15 @@ export class LoginComponent implements OnInit {
   }
 
   // Iniciar sesión con Google
+
   async loginWithGoogle() {
     await this.authFirebaseService.loginWithGoogle();
   }
+
+  // Iniciar sesión con Facebook
+  async loginWithFacebook() {
+    await this.authFirebaseService.loginWithFacebook();
+  }
 
   get f() {
     return this.loginForm.controls;
