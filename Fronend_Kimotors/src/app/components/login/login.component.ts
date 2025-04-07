@@ -30,9 +30,13 @@ export class LoginComponent implements OnInit {
   }
 
   // Iniciar sesión con Google
-
   async loginWithGoogle() {
     await this.authFirebaseService.loginWithGoogle();
+  }
+
+  // Iniciar sesión con GitHub
+  async loginWithGithub() {
+    await this.authFirebaseService.loginWithGithub();
   }
 
   // Iniciar sesión con Facebook
@@ -44,7 +48,7 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  //  Iniciar sesión con email y contraseña
+  // Iniciar sesión con email y contraseña (MongoDB)
   async onSubmit() {
     this.submitted = true;
 
