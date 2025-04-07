@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-vista-moto',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './vista-moto.component.html',
   styleUrl: './vista-moto.component.css'
 })

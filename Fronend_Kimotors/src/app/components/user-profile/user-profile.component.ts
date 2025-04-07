@@ -64,13 +64,12 @@ export class UserProfileComponent implements OnInit {
   
     const email = this.user.email;
   
-    // Verifica si el usuario proviene de Firebase
-    const isGoogleUser = 'providerData' in this.user && this.user.providerData.some(provider => provider.providerId === 'google.com');
-  
+    const isFirebaseUser = 'providerData' in this.user && this.user.providerData.length > 0;
+
     console.log('Eliminando usuario con email:', email);
-    console.log('Es usuario de Google:', isGoogleUser);
-  
-    if (isGoogleUser) {
+    console.log('Es usuario de Firebase:', isFirebaseUser);
+
+    if (isFirebaseUser) {
       // Eliminar cuenta de Firebase
       try {
         await this.authFirebaseService.deleteFirebaseUser();

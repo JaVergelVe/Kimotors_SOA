@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser,FacebookAuthProvider } from '@angular/fire/auth';
-
+import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser, FacebookAuthProvider, GithubAuthProvider } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -19,6 +18,7 @@ export class AuthFirebaseService {
       console.error('Error al autenticar con Google:', error);
     }
   }
+  
   // Iniciar sesión con Facebook
   async loginWithFacebook(): Promise<void> {
     try {
@@ -30,6 +30,18 @@ export class AuthFirebaseService {
       console.error('Error al autenticar con Facebook:', error);
     }
   }
+
+  // Iniciar sesión con GitHub
+  async loginWithGithub(): Promise<void> {
+    try {
+      const provider = new GithubAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      console.log('Usuario autenticado con GitHub:', result.user);
+      this.router.navigate(['/home']);
+    } catch (error) {
+      console.error('Error al autenticar con GitHub:', error);
+    }
+  }
 
   // Obtener el usuario actual autenticado en Firebase
   getCurrentUser() {
