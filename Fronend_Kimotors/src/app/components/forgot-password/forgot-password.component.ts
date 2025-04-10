@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthFirebaseService } from '../../services/authFireBase.service';
 
@@ -16,13 +16,17 @@ export class ForgotPasswordComponent implements OnInit {
   submitted = false;
   message: string = '';
   errorMessage: string = '';
+  loading = false;
 
-  constructor(private formBuilder: FormBuilder, private authFirebaseService: AuthFirebaseService, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authFirebaseService: AuthFirebaseService
+  ) {}
 
   ngOnInit() {
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-    })
+    });
   }
 
   get f() {
@@ -31,24 +35,35 @@ export class ForgotPasswordComponent implements OnInit {
 
   async onSubmit() {
     this.submitted = true;
-  
+    this.message = '';
+    this.errorMessage = '';
+
     if (this.forgotPasswordForm.invalid) return;
-  
+
+    this.loading = true;
     const { email } = this.forgotPasswordForm.value;
-  
+
     try {
       await this.authFirebaseService.sendPasswordResetEmail(email);
       this.message = 'Se ha enviado un enlace para restablecer tu contraseña.';
-      this.errorMessage = '';
     } catch (error: any) {
-      if (error.code === 'auth/user-not-found') {
-        // Si el usuario no está en Firebase, redirigir a restablecer con Mongo
-        this.router.navigate(['/reset-password-manual'], { queryParams: { email } });
-      } else {
-        this.message = '';
-        this.errorMessage = 'Ocurrió un error al enviar el correo. Inténtalo de nuevo.';
-        console.error(error);
+      console.error('Error al enviar el email de restablecimiento:', error);
+
+      switch (error.code) {
+        case 'auth/user-not-found':
+          this.errorMessage = 'No existe un usuario con ese correo.';
+          break;
+        case 'auth/invalid-email':
+          this.errorMessage = 'El correo electrónico ingresado no es válido.';
+          break;
+        case 'auth/too-many-requests':
+          this.errorMessage = 'Demasiados intentos. Intenta más tarde.';
+          break;
+        default:
+          this.errorMessage = 'Ocurrió un error al enviar el correo. Intenta nuevamente.';
       }
+    } finally {
+      this.loading = false;
     }
   }
 }

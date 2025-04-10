@@ -23,6 +23,11 @@ export class AuthService {
     return this.http.get<User>(`${this.apiUrl}/email/${email}`);
   }
 
+  // Validar si la contrasena corresponde al email
+  login(email: string, password: string): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/login`, { email, password });
+  }  
+
   // Registrar un nuevo usuario
   registerUser(user: User): Observable<User> {
     return this.http.post<User>(this.apiUrl, user);

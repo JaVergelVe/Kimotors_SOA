@@ -1,9 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { AuthFirebaseService } from '../../services/authFireBase.service'
+import { AuthFirebaseService } from '../../services/authFireBase.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -17,7 +23,6 @@ export class ResetPasswordManualComponent {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private authService = inject(AuthService);
   private authFirebaseService = inject(AuthFirebaseService);
 
   form: FormGroup = this.fb.group(
@@ -29,14 +34,12 @@ export class ResetPasswordManualComponent {
   );
 
   oobCode: string | null = null;
-  email: string | null = null;
   successMessage = '';
   errorMessage = '';
 
   constructor() {
     this.route.queryParams.subscribe(params => {
       this.oobCode = params['oobCode'] || null;
-      this.email = params['email'] || null;
     });
   }
 
@@ -53,38 +56,20 @@ export class ResetPasswordManualComponent {
   onSubmit(): void {
     const newPassword = this.form.value.password;
 
-    console.log('OobCode:', this.oobCode);
-    console.log('Nueva contraseña:', newPassword);
-
     if (this.oobCode) {
-      // Firebase
-      this.authFirebaseService.resetPasswordWithFirebase(this.oobCode, newPassword).subscribe({
-        next: () => {
-          this.successMessage = 'Contraseña restablecida con éxito (Firebase).';
+      this.authFirebaseService.resetPasswordWithFirebase(this.oobCode, newPassword)
+        .then(() => {
+          this.successMessage = 'Contraseña restablecida con éxito.';
           this.errorMessage = '';
-          setTimeout(() => this.router.navigate(['/login']));
-        },
-        error: (err) => {
+          setTimeout(() => this.router.navigate(['/login']), 2500);
+        })
+        .catch((err: any) => {
+          console.error('Error al restablecer con Firebase:', err);
           this.successMessage = '';
-          console.error('Error detallado al restablecer con Firebase:', err);
-          this.errorMessage = 'Error al restablecer contraseña con Firebase.';
-        }
-      });
-    } else if (this.email) {
-      // MongoDB
-      this.authService.updatePassword(this.email, newPassword).subscribe({
-        next: () => {
-          this.successMessage = 'Contraseña restablecida con éxito (MongoDB).';
-          this.errorMessage = '';
-          setTimeout(() => this.router.navigate(['/login']));
-        },
-        error: () => {
-          this.successMessage = '';
-          this.errorMessage = 'Error al restablecer contraseña con MongoDB.';
-        }
-      });
+          this.errorMessage = 'Error al restablecer contraseña.';
+        });
     } else {
-      this.errorMessage = 'No se pudo determinar el origen del restablecimiento.';
+      this.errorMessage = 'Código de verificación no válido.';
     }
   }
 }
