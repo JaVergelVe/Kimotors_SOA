@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider, deleteUser, FacebookAuthProvider, GithubAuthProvider } from '@angular/fire/auth';
+import {
+  Auth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  GithubAuthProvider,
+  deleteUser,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  signInWithEmailAndPassword
+} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -18,7 +28,7 @@ export class AuthFirebaseService {
       console.error('Error al autenticar con Google:', error);
     }
   }
-  
+
   // Iniciar sesión con Facebook
   async loginWithFacebook(): Promise<void> {
     try {
@@ -28,8 +38,8 @@ export class AuthFirebaseService {
       this.router.navigate(['/home']);
     } catch (error) {
       console.error('Error al autenticar con Facebook:', error);
-    }
-  }
+    }
+  }
 
   // Iniciar sesión con GitHub
   async loginWithGithub(): Promise<void> {
@@ -43,12 +53,24 @@ export class AuthFirebaseService {
     }
   }
 
-  // Obtener el usuario actual autenticado en Firebase
+  // Iniciar sesión con email y contraseña
+  async loginWithEmail(email: string, password: string): Promise<void> {
+    try {
+      const result = await signInWithEmailAndPassword(this.auth, email, password);
+      console.log('Usuario autenticado con email:', result.user);
+      this.router.navigate(['/home']);
+    } catch (error) {
+      console.error('Error al iniciar sesión con email:', error);
+      throw error;
+    }
+  }
+
+  // Obtener el usuario actual
   getCurrentUser() {
     return this.auth.currentUser;
   }
 
-  // Cerrar sesión en Firebase
+  // Cerrar sesión
   async logout(): Promise<void> {
     try {
       await this.auth.signOut();
@@ -64,13 +86,23 @@ export class AuthFirebaseService {
       const currentUser = this.auth.currentUser;
       if (currentUser) {
         await deleteUser(currentUser);
-        console.log('Cuenta de Firebase eliminada exitosamente.');
+        console.log('Cuenta eliminada exitosamente');
       } else {
-        throw new Error('No se encontró un usuario autenticado en Firebase.');
+        throw new Error('No hay un usuario autenticado');
       }
     } catch (error) {
-      console.error('Error al eliminar la cuenta de Firebase:', error);
+      console.error('Error al eliminar la cuenta:', error);
       throw error;
     }
+  }
+
+  // Enviar email de recuperación
+  sendPasswordResetEmail(email: string): Promise<void> {
+    return sendPasswordResetEmail(this.auth, email);
+  }
+
+  // Confirmar nueva contraseña
+  resetPasswordWithFirebase(oobCode: string, newPassword: string): Promise<void> {
+    return confirmPasswordReset(this.auth, oobCode, newPassword);
   }
 }

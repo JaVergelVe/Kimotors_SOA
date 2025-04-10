@@ -8,6 +8,7 @@ import { VistaMotoComponent } from './components/vista-moto/vista-moto.component
 import { EncabezadoComponent } from './components/encabezado/encabezado.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { TarjetaMotoComponent } from './components/tarjeta-moto/tarjeta-moto.component';
+import { ResetPasswordManualComponent } from './components/reset-password-manual/reset-password-manual.component';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent, pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'encabezado', component: EncabezadoComponent },
   { path: 'vista-moto', component: VistaMotoComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password-manual', component: ResetPasswordManualComponent },
   { path: 'tarjeta-moto', component: TarjetaMotoComponent },
   { path: 'user-porfile', component: UserProfileComponent },
   { path: '**', redirectTo: '' }

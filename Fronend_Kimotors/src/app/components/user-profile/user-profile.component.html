@@ -1,14 +1,58 @@
 <div class="user-info-container">
-    <h2>Información del Usuario</h2>
-  
-    <div class="user-detail">
-      <p><strong>Nombre:</strong> {{ username || 'N/A' }}</p>
-      <p><strong>Correo:</strong> {{ user?.email }}</p>
-    </div>
-  
-    <button (click)="logout()">Cerrar Sesión</button>
+  <h2>Información del Usuario</h2>
 
-    <button (click)="deleteUser()">Eliminar Cuenta</button>
-  
-    <button (click)="navigateToHome()">Ir al Inicio</button>
+  <div class="user-detail">
+    <p><strong>Nombre:</strong> {{ username || 'N/A' }}</p>
+    <p><strong>Correo:</strong> {{ user?.email }}</p>
+  </div>
+
+  <!-- Formulario de cambio de contraseña SOLO para usuarios MongoDB -->
+  <div *ngIf="isMongoUser">
+    <h3>Cambiar Contraseña</h3>
+    
+    <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePassword()">
+      <div>
+        <label for="currentPassword">Contraseña actual:</label>
+        <input
+          type="password"
+          id="currentPassword"
+          formControlName="currentPassword"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="newPassword">Nueva contraseña:</label>
+        <input
+          type="password"
+          id="newPassword"
+          formControlName="newPassword"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="confirmPassword">Confirmar nueva contraseña:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          required
+        />
+      </div>
+
+      <div *ngIf="changePasswordForm.errors?.['passwordMismatch'] && changePasswordForm.touched" class="invalid-feedback">
+        Las contraseñas no coinciden.
+      </div>
+
+      <button type="submit" [disabled]="changePasswordForm.invalid">Cambiar Contraseña</button>
+    </form>
+
+    <p *ngIf="errorMessage" class="invalid-feedback">{{ errorMessage }}</p>
+    <p *ngIf="successMessage" class="success-feedback">{{ successMessage }}</p>
+  </div>
+
+  <button (click)="logout()">Cerrar Sesión</button>
+  <button (click)="deleteUser()">Eliminar Cuenta</button>
+  <button (click)="navigateToHome()">Ir al Inicio</button>
 </div>
