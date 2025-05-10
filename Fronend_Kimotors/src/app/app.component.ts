@@ -6,9 +6,9 @@ import { EncabezadoComponent } from './components/encabezado/encabezado.componen
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule,EncabezadoComponent],
-  templateUrl:'./app.component.html'
-
+  imports: [CommonModule, RouterModule, EncabezadoComponent],
+  templateUrl:'./app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   title='monos'
