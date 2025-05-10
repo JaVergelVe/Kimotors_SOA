@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MotoService } from '../../services/moto.service';
+import { Motocicleta } from '../../services/moto.service';
 
 @Component({
   selector: 'app-tarjeta-moto',
@@ -7,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './tarjeta-moto.component.css'
 })
 export class TarjetaMotoComponent {
-
+  motoService=inject(MotoService)
 }

@@ -1,17 +1,21 @@
 .padre2{
     display: flex;
+
 }
 .padre{
-    background-color: #121A21;
-    width: auto;
-
+    background-color: #2B3B49;
+    max-width: 2000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
 }
 .contenedor{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 10px;
-    align-items: start;
+    padding: 20px;
+    align-items: center;
 }
 .h{
     color: white;
@@ -19,6 +23,22 @@
 .parrafo{
     color: #94ADC7;
 }
-.a{
+.foto{
     background-color: white;
+}
+a{
+    color: #B0D4EF;
+    text-decoration: underline;
+}
+.secciones{
+    display: flex;
+    gap: 5px;
+    justify-items: center;
+    align-items: start;
+    max-width: 2000px;
+    background-color: red;
+}
+.foticos{
+    height: 200px;
+    width: 300px;
 }
