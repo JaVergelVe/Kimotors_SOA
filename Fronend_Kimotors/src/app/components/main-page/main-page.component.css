@@ -4,3 +4,20 @@
     width: 100%;
     /*#94ADC  color*/
 }
+.cuerpo{
+    padding: 20px;
+    background-color: #1A252E;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.contenido{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+    width: 100%;
+    background-color: blueviolet;
+}

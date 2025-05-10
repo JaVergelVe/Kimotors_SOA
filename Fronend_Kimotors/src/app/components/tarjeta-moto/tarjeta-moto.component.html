@@ -1,10 +1,24 @@
 <div class="padre2">
     <div class="padre">
-        <div class="contenedor">
-            <div class="a">foto</div>
-            <h2 class="h">Marca Modelo</h2>
-            <p class=" parrafo">Marca</p>
-            <p class="parrafo">Precio</p>
-        </div>
+        @for (motoSeccion of motoService.motos; track $index) {
+
+            <section class="caja">
+            <h3 class="h3">{{motoSeccion[0].marca}}</h3>
+
+                <div class="secciones">
+                    @for (motoDetalle of motoSeccion; track $index) {
+
+                    <div class="contenedor">
+                        <img src="{{motoDetalle.imagenes[0]}}" alt="" class="foticos">
+                        <h2 class="h">{{motoDetalle.modelo}}</h2>
+                        <p class=" parrafo">{{motoDetalle.marca}}</p>
+                        <p class="parrafo">{{motoDetalle.precio_aprox}}</p>
+                        <a href=""> Ver mas.</a>
+                    </div>
+                }
+                </div>
+            </section>
+        }
+
     </div>
 </div>
