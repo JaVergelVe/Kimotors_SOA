@@ -2,9 +2,11 @@
     <div class="padre">
         @for (motoSeccion of motoService.motos; track $index) {
 
-            <section class="secciones">
+            <section class="caja">
+            <h3 class="h3">{{motoSeccion[0].marca}}</h3>
 
-                @for (motoDetalle of motoSeccion; track $index) {
+                <div class="secciones">
+                    @for (motoDetalle of motoSeccion; track $index) {
 
                     <div class="contenedor">
                         <img src="{{motoDetalle.imagenes[0]}}" alt="" class="foticos">
@@ -14,6 +16,7 @@
                         <a href=""> Ver mas.</a>
                     </div>
                 }
+                </div>
             </section>
         }
 
