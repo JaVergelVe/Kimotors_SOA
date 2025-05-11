@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 export interface Motocicleta{
   marca: string;
@@ -42,24 +43,51 @@ export interface Motocicleta{
   imagenes: string[];
 }
 
+// Agregar esta interfaz para manejar colecciones
+export interface MotosResponse {
+  motocicletas: {
+    [key: string]: Motocicleta[];
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class MotoService {
-  httpClient=inject(HttpClient)
+  private baseUrl = 'http://localhost:8080/motocicletas';
+  private httpClient = inject(HttpClient);
+  private motosSubject = new BehaviorSubject<MotosResponse['motocicletas']>({});
+  motos$ = this.motosSubject.asObservable();
+
   constructor() {
-    this.httpClient.get<Motocicleta[]> ('http://localhost:8080/motocicletas/Aprilia').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/Ducati').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/Honda').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/BMW').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/CFMOTO').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/Kawasaki').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/KTM').subscribe(moto=> {this.motos.push(moto)})
-    this.httpClient.get<Motocicleta[]>('http://localhost:8080/motocicletas/Yamaha').subscribe(moto=> {this.motos.push(moto)})
-    console.log(this.motos)
+    this.cargarTodasLasMotos();
   }
-  motos:Motocicleta[][]= []
 
+  private cargarTodasLasMotos() {
+    this.httpClient.get<MotosResponse[]>(`${this.baseUrl}`)
+      .pipe(
+        map(response => response[0]?.motocicletas || {})
+      )
+      .subscribe({
+        next: (motos) => {
+          this.motosSubject.next(motos);
+        },
+        error: (error) => {
+          console.error('Error al cargar las motos:', error);
+        }
+      });
+  }
 
+  getMotoPorMarca(marca: string): Observable<Motocicleta[]> {
+    return this.httpClient.get<Motocicleta[]>(`${this.baseUrl}/${marca}`);
+  }
+
+  getTodasLasMarcas(): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${this.baseUrl}/marcas`);
+  }
+
+  // Propiedad para acceder al valor actual de las motos
+  get motos(): MotosResponse['motocicletas'] {
+    return this.motosSubject.value;
+  }
 }

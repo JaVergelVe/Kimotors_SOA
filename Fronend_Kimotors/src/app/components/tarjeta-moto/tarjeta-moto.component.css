@@ -1,50 +1,93 @@
-.padre2{
+.padre2 {
     display: flex;
+    justify-content: center;
+    width: 100%;
+}
 
-}
-.padre{
+.padre {
     background-color: #2B3B49;
+    width: 100%;
     max-width: 2000px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
-}
-.contenedor{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
     padding: 20px;
-    align-items: center;
+    gap: 30px;
 }
-.h{
-    color: white;
-}
-.parrafo{
+
+.loading {
     color: #94ADC7;
+    padding: 20px;
+    text-align: center;
 }
-.foto{
-    background-color: white;
-}
-a{
-    color: #B0D4EF;
-    text-decoration: underline;
-}
-.secciones{
+
+.caja {
+    width: 100%;
     display: flex;
-    gap: 5px;
-    justify-items: center;
-    align-items: start;
-    max-width: 2000px;
-    background-color: red;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
-.foticos{
+
+.h3 {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+}
+
+.secciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
+    background-color: transparent;
+}
+
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.contenedor:hover {
+    transform: translateY(-5px);
+}
+
+.h {
+    color: white;
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+}
+
+.parrafo {
+    color: #94ADC7;
+    margin: 0;
+    text-align: center;
+}
+
+.foticos {
     height: 200px;
     width: 300px;
+    object-fit: cover;
+    border-radius: 4px;
 }
-.caja{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-items: center;
+
+a {
+    color: #B0D4EF;
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid #B0D4EF;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+a:hover {
+    background-color: #B0D4EF;
+    color: #2B3B49;
 }
