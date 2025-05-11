@@ -27,116 +27,128 @@ export class AuthFirebaseService {
     private toastr: ToastrService
   ) {}
 
-  // LOGIN CON GOOGLE
-  async loginWithGoogle(): Promise<void> {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result: UserCredential = await signInWithPopup(this.auth, provider);
-      this.toastr.success(' Inicio de sesión con Google exitoso');
+  private async handleAuthError(error: any, provider: string): Promise<void> {
+    console.error(`Error al autenticar con ${provider}:`, error);
+    
+    if (error.code === 'auth/account-exists-with-different-credential') {
+      const email = error.customData?.email;
+      let cred;
       
-      // Si hay credenciales pendientes por vincular
-      if (this.pendingCred) {
-        await linkWithCredential(result.user, this.pendingCred);
-        this.toastr.success(`${this.pendingToLink} vinculado correctamente`);
-        this.pendingCred = null;
-        this.pendingToLink = null;
+      switch(provider) {
+        case 'Google':
+          cred = GoogleAuthProvider.credentialFromError(error);
+          break;
+        case 'Facebook':
+          cred = FacebookAuthProvider.credentialFromError(error);
+          break;
+        case 'GitHub':
+          cred = GithubAuthProvider.credentialFromError(error);
+          break;
       }
 
-      // Solo redirige si el inicio de sesión fue exitoso
-      this.router.navigate(['/home']);
-    } catch (error: any) {
-      console.error('Error al autenticar con Google:', error);
-      if (error.code === 'auth/account-exists-with-different-credential') {
-        const cred = GoogleAuthProvider.credentialFromError(error);
-        const email = error.customData?.email;
-        if (cred && email) {
-          this.pendingCred = cred;
-          this.pendingToLink = 'google.com';
-          this.toastr.warning(
-            `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con Facebook o GitHub.`
-          );
-        }
-      } else {
-        this.toastr.error('Error al iniciar sesión con Google');
+      if (cred && email) {
+        this.pendingCred = cred;
+        this.pendingToLink = `${provider.toLowerCase()}.com`;
+        const otherProviders = ['Google', 'Facebook', 'GitHub']
+          .filter(p => p !== provider)
+          .join(' o ');
+        
+        this.toastr.warning(
+          `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con ${otherProviders}.`,
+          '⚠️ Cuenta existente: '
+        );
       }
+    } else {
+      this.toastr.error(`Error al iniciar sesión con ${provider}`, '❌ Error: ');
+      throw error;
+    }
+  }
+
+  private async handleSuccessfulLogin(result: UserCredential, provider: string): Promise<void> {
+    this.toastr.success(`Inicio de sesión con ${provider} exitoso`);
+    
+    if (this.pendingCred) {
+      await linkWithCredential(result.user, this.pendingCred);
+      this.toastr.success(`${this.pendingToLink} vinculado correctamente`);
+      this.pendingCred = null;
+      this.pendingToLink = null;
+    }
+
+    await this.router.navigate(['/home']);
+  }
+  
+  private async checkAndHandleExistingSession(): Promise<void> {
+    if (this.isAuthenticated) {
+      const confirmLogout = window.confirm('Ya hay una sesión activa. ¿Desea cerrar la sesión actual e iniciar una nueva?');
+      if (confirmLogout) {
+        await this.logout();
+      } else {
+        throw new Error('login_cancelled');
+      }
+    }
+  }
+
+  // LOGIN CON GOOGLE
+  async loginWithGoogle(): Promise<void> {
+    try {
+      await this.checkAndHandleExistingSession();
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      await this.handleSuccessfulLogin(result, 'Google');
+    } catch (error: any) {
+      if (error.message === 'login_cancelled') {
+        this.toastr.info('Inicio de sesión cancelado');
+        return;
+      }
+      await this.handleAuthError(error, 'Google');
     }
   }
 
   // LOGIN CON FACEBOOK
   async loginWithFacebook(): Promise<void> {
-    const provider = new FacebookAuthProvider();
-    provider.addScope('email');
     try {
-      const result: UserCredential = await signInWithPopup(this.auth, provider);
-      this.toastr.success(' Inicio de sesión con Facebook exitoso');
-
-      if (this.pendingCred) {
-        await linkWithCredential(result.user, this.pendingCred);
-        this.toastr.success(`${this.pendingToLink} vinculado correctamente`);
-        this.pendingCred = null;
-        this.pendingToLink = null;
-      }
-
-      this.router.navigate(['/home']);
+      await this.checkAndHandleExistingSession();
+      const provider = new FacebookAuthProvider();
+      provider.addScope('email');
+      const result = await signInWithPopup(this.auth, provider);
+      await this.handleSuccessfulLogin(result, 'Facebook');
     } catch (error: any) {
-      console.error('Error al autenticar con Facebook:', error);
-      if (error.code === 'auth/account-exists-with-different-credential') {
-        const cred = FacebookAuthProvider.credentialFromError(error);
-        const email = error.customData?.email;
-        if (cred && email) {
-          this.pendingCred = cred;
-          this.pendingToLink = 'facebook.com';
-          this.toastr.warning(
-            `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con Google o GitHub.`,
-            '⚠️ Cuenta existente'
-          );
-        }
-      } else {
-        this.toastr.error('Error al iniciar sesión con Facebook');
+      if (error.message === 'login_cancelled') {
+        this.toastr.info('Inicio de sesión cancelado');
+        return;
       }
+      await this.handleAuthError(error, 'Facebook');
     }
   }
-
+  
   // LOGIN CON GITHUB
   async loginWithGithub(): Promise<void> {
-    const provider = new GithubAuthProvider();
     try {
-      const result: UserCredential = await signInWithPopup(this.auth, provider);
-      this.toastr.success('Inicio de sesión con GitHub exitoso');
-
-      if (this.pendingCred) {
-        await linkWithCredential(result.user, this.pendingCred);
-        this.toastr.success(`${this.pendingToLink} vinculado correctamente`);
-        this.pendingCred = null;
-        this.pendingToLink = null;
-      }
-
-      this.router.navigate(['/home']);
+      await this.checkAndHandleExistingSession();
+      const provider = new GithubAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      await this.handleSuccessfulLogin(result, 'GitHub');
     } catch (error: any) {
-      console.error('Error al autenticar con GitHub:', error);
-      if (error.code === 'auth/account-exists-with-different-credential') {
-        const cred = GithubAuthProvider.credentialFromError(error);
-        const email = error.customData?.email;
-        if (cred && email) {
-          this.pendingCred = cred;
-          this.pendingToLink = 'github.com';
-          this.toastr.warning(
-            `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con Google o Facebook.`
-          );
-        }
-      } else {
-        this.toastr.error('Error al iniciar sesión con GitHub');
+      if (error.message === 'login_cancelled') {
+        this.toastr.info('Inicio de sesión cancelado');
+        return;
       }
+      await this.handleAuthError(error, 'GitHub');
     }
   }
 
   // Iniciar sesión con email y contraseña
   async loginWithEmail(email: string, password: string): Promise<void> {
     try {
+      await this.checkAndHandleExistingSession();
       const result = await signInWithEmailAndPassword(this.auth, email, password);
       this.toastr.success('Inicio de sesión exitoso', '✔️ Bienvenido');
       this.router.navigate(['/home']);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.message === 'login_cancelled') {
+        this.toastr.info('Inicio de sesión cancelado');
+        return;
+      }
       console.error('Error al iniciar sesión con email:', error);
       this.toastr.error('Error al iniciar sesión con email', '❌ Fallo');
       throw error;
@@ -146,6 +158,16 @@ export class AuthFirebaseService {
   // Obtener el usuario actual
   getCurrentUser() {
     return this.auth.currentUser;
+  }
+
+  get isAuthenticated(): boolean {
+    return this.auth.currentUser !== null;
+  }
+
+  getCurrentProvider(): string | null {
+    const user = this.auth.currentUser;
+    if (!user || !user.providerData.length) return null;
+    return user.providerData[0].providerId;
   }
 
   // Cerrar sesión
