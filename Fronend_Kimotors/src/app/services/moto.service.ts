@@ -86,6 +86,37 @@ export class MotoService {
     return this.httpClient.get<string[]>(`${this.baseUrl}/marcas`);
   }
 
+  // Método para obtener todas las motos en un array plano
+  getAllMotos(): Observable<Motocicleta[]> {
+    return this.motos$.pipe(
+      map(motosObj => {
+        return Object.values(motosObj).flat();
+      })
+    );
+  }
+
+  // Método para ordenar motos por precio
+  getMotosByPrecio(): Observable<Motocicleta[]> {
+    return this.getAllMotos().pipe(
+      map(motos => {
+        return motos.sort((a, b) => {
+          const precioA = parseInt(a.precio_aprox.replace(/\D/g, ''));
+          const precioB = parseInt(b.precio_aprox.replace(/\D/g, ''));
+          return precioB - precioA;
+        });
+      })
+    );
+  }
+
+  // Método para ordenar motos por cilindraje
+  getMotosByCilindraje(): Observable<Motocicleta[]> {
+    return this.getAllMotos().pipe(
+      map(motos => {
+        return motos.sort((a, b) => b.datos_motor.cilindrada - a.datos_motor.cilindrada);
+      })
+    );
+  }
+
   // Propiedad para acceder al valor actual de las motos
   get motos(): MotosResponse['motocicletas'] {
     return this.motosSubject.value;

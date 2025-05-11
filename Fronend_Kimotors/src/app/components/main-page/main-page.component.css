@@ -1,96 +1,24 @@
-.separador {
-    height: 2px;
-    background: linear-gradient(90deg, #94ADC7 0%, #2B3B49 100%);
-    width: 100%;
-}
-
 .cuerpo {
     min-height: 100vh;
     background-color: #1A252E;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
-.banner {
-    text-align: center;
-    padding: 40px 20px;
-    width: 100%;
-    max-width: 1200px;
-    background: linear-gradient(135deg, #2B3B49 0%, #1A252E 100%);
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.banner h1 {
-    color: #FFFFFF;
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-.banner p {
-    color: #94ADC7;
-    font-size: 1.2rem;
-}
-
-.filtros {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    padding: 0 20px;
-}
-
-.busqueda, .filtro-select {
-    padding: 12px 20px;
-    border: 1px solid #94ADC7;
-    border-radius: 5px;
-    background-color: #2B3B49;
-    color: #FFFFFF;
-    font-size: 1rem;
-}
-
-.busqueda {
-    width: 300px;
-}
-
-.filtro-select {
-    width: 200px;
-}
-
-.busqueda::placeholder {
-    color: #94ADC7;
 }
 
 .contenido {
-    width: 100%;
-    max-width: 1200px;
-    background-color: transparent;
-    border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-@media (max-width: 768px) {
-    .banner h1 {
-        font-size: 2rem;
-    }
+.todas-motos {
+    animation: fadeIn 0.3s ease-in;
+}
 
-    .banner p {
-        font-size: 1rem;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
-
-    .filtros {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .busqueda, .filtro-select {
-        width: 100%;
-        max-width: 300px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

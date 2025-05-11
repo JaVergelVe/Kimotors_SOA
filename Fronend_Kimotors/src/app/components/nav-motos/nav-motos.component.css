@@ -1,0 +1,53 @@
+.nav-motos {
+    background-color: #2B3B49;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(148, 173, 199, 0.2);
+}
+
+.nav-container {
+    display: flex;
+    gap: 16px;
+    padding: 0 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.nav-container::-webkit-scrollbar {
+    display: none;
+}
+
+button {
+    background: transparent;
+    border: none;
+    color: #94ADC7;
+    padding: 8px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: rgba(148, 173, 199, 0.1);
+}
+
+button.active {
+    background-color: #94ADC7;
+    color: #2B3B49;
+}
+
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 8px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
