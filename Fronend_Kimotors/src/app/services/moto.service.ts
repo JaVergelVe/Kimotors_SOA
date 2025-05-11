@@ -50,6 +50,15 @@ export interface MotosResponse {
   };
 }
 
+export interface MotoResponse {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  moto: Motocicleta;
+  precioNumerico: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -95,26 +104,12 @@ export class MotoService {
     );
   }
 
-  // Método para ordenar motos por precio
-  getMotosByPrecio(): Observable<Motocicleta[]> {
-    return this.getAllMotos().pipe(
-      map(motos => {
-        return motos.sort((a, b) => {
-          const precioA = parseInt(a.precio_aprox.replace(/\D/g, ''));
-          const precioB = parseInt(b.precio_aprox.replace(/\D/g, ''));
-          return precioB - precioA;
-        });
-      })
-    );
-  }
-
-  // Método para ordenar motos por cilindraje
-  getMotosByCilindraje(): Observable<Motocicleta[]> {
-    return this.getAllMotos().pipe(
-      map(motos => {
-        return motos.sort((a, b) => b.datos_motor.cilindrada - a.datos_motor.cilindrada);
-      })
-    );
+  // Método para obtener motos ordenadas por precio desde el backend
+  getMotosPorPrecioDescendente(): Observable<Motocicleta[]> {
+    return this.httpClient.get<MotoResponse[]>(`${this.baseUrl}/ordenadas-precio`)
+      .pipe(
+        map(response => response.map(item => item.moto))
+      );
   }
 
   // Propiedad para acceder al valor actual de las motos

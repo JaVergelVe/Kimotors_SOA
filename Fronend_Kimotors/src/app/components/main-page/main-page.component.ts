@@ -4,11 +4,19 @@ import { TarjetaMotoComponent } from '../tarjeta-moto/tarjeta-moto.component';
 import { FormsModule } from '@angular/forms';
 import { NavMotosComponent } from "../nav-motos/nav-motos.component";
 import { TodasMotosComponent } from '../todas-motos/todas-motos.component';
+import { MotosPrecioComponent } from '../motos-precio/motos-precio.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
-  imports: [CommonModule, TarjetaMotoComponent, TodasMotosComponent, FormsModule, NavMotosComponent, RouterModule],
+  imports: [
+    CommonModule, 
+    TarjetaMotoComponent, 
+    TodasMotosComponent,
+    MotosPrecioComponent,
+    FormsModule, 
+    NavMotosComponent, 
+    RouterModule],
   standalone: true,
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'

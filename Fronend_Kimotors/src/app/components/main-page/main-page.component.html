@@ -5,12 +5,11 @@
     
     <div class="contenido">
         @if (seccionActual === 'todas') {
-            <!-- Aquí irá el componente de todas las motos -->
-            <div class="todas-motos">
-                <app-todas-motos></app-todas-motos>
-            </div>
+            <app-todas-motos></app-todas-motos>
         } @else if (seccionActual === 'marcas') {
             <app-tarjeta-moto></app-tarjeta-moto>
+        } @else if (seccionActual === 'precio') {
+            <app-motos-precio></app-motos-precio>
         }
     </div>
 </div>
