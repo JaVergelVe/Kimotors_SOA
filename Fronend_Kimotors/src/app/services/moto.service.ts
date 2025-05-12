@@ -7,7 +7,7 @@ export interface Motocicleta{
   modelo: string;
   año: number;
   datos_motor: {
-    cilindrada: number;
+    cilindraje: number;
     disposicion: string;
     cilindros: string;
     distribucion: string;
@@ -57,6 +57,13 @@ export interface MotoResponse {
   };
   moto: Motocicleta;
   precioNumerico: number;
+}
+
+export interface MotoCilindrajeResponse {
+  motosPorMarca: {
+    k: string;
+    v: Motocicleta;
+  };
 }
 
 @Injectable({
@@ -137,6 +144,23 @@ export class MotoService {
     return this.httpClient.get<MotoResponse[]>(`${this.baseUrl}/ordenadas-precio`)
       .pipe(
         map(response => response.map(item => item.moto))
+      );
+  }
+  // Método para obtener motos con cilindrada mayor a 500cc
+  getMotosMayorA500cc(): Observable<Motocicleta[]> {
+    return this.httpClient.get<MotoCilindrajeResponse[]>(`${this.baseUrl}/mayor-500cc`)
+      .pipe(
+        map(response => {
+          if (response && Array.isArray(response)) {
+            return response.map(item => {
+              if (item.motosPorMarca && item.motosPorMarca.v) {
+                return item.motosPorMarca.v;
+              }
+              return item as unknown as Motocicleta;
+            });
+          }
+          return [];
+        })
       );
   }
 

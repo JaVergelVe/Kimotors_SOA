@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NavMotosComponent } from "../nav-motos/nav-motos.component";
 import { TodasMotosComponent } from '../todas-motos/todas-motos.component';
 import { MotosPrecioComponent } from '../motos-precio/motos-precio.component';
+import { MotosCilindrajeComponent } from '../motos-cilindraje/motos-cilindraje.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -14,6 +15,7 @@ import { RouterModule } from '@angular/router';
     TarjetaMotoComponent, 
     TodasMotosComponent,
     MotosPrecioComponent,
+    MotosCilindrajeComponent,
     FormsModule, 
     NavMotosComponent, 
     RouterModule],
