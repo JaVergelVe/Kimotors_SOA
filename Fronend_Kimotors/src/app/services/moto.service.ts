@@ -5,7 +5,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 export interface Motocicleta{
   marca: string;
   modelo: string;
-  año: number;
+  anio: number;
   datos_motor: {
     cilindraje: number;
     disposicion: string;
@@ -64,6 +64,25 @@ export interface MotoCilindrajeResponse {
     k: string;
     v: Motocicleta;
   };
+}
+
+export interface DatosMotorResponse {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  datos_motor: {
+    cilindraje: number;
+    disposicion: string;
+    cilindros: number;
+    distribucion: string;
+    valvulas_por_cilindro: number;
+    refrigeracion: string;
+    compresion: string;
+    potencia: string;
+    torque: string;
+  };
+  modelo: string;
 }
 
 @Injectable({
@@ -162,6 +181,11 @@ export class MotoService {
           return [];
         })
       );
+  }
+
+  // Método para obtener la información del motor por modelo
+  getDatosMotor(modelo: string): Observable<DatosMotorResponse[]> {
+    return this.httpClient.get<DatosMotorResponse[]>(`${this.baseUrl}/motor-unwind/${modelo}`);
   }
 
   // Propiedad para acceder al valor actual de las motos
