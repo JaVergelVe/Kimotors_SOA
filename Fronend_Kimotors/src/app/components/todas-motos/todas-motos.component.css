@@ -54,3 +54,30 @@ a:hover {
     background-color: #B0D4EF;
     color: #2B3B49;
 }
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.boton-cargar {
+    background-color: #2B3B49;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.boton-cargar:hover {
+    background-color: #3a4d5e;
+}
+
+.mensaje-fin {
+    text-align: center;
+    color: #94ADC7;
+    font-style: italic;
+    margin: 20px 0;
+}

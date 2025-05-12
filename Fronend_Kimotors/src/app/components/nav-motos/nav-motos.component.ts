@@ -15,7 +15,7 @@ export class NavMotosComponent {
     { id: 'todas', nombre: 'Todas las motos' },
     { id: 'marcas', nombre: 'Por marca' },
     { id: 'precio', nombre: 'Por precio' },
-    { id: 'cilindraje', nombre: 'Por cilindraje' }
+    { id: 'cilindraje', nombre: 'Por cilindraje (>500cc)' }
   ];
   
   seccionActual = 'todas';

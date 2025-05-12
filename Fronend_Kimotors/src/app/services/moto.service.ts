@@ -87,6 +87,34 @@ export class MotoService {
       });
   }
 
+  // Método para obtener motos paginadas
+  getMotosPaginadas(skip: number, limit: number): Observable<Motocicleta[]> {
+    console.log(`Solicitando motos paginadas: skip=${skip}, limit=${limit}`);
+    return this.httpClient.get<any[]>(`${this.baseUrl}/paginadas/${skip}/${limit}`)
+      .pipe(
+        map(response => {
+          console.log('Respuesta del servidor:', response);
+          // Verificar la estructura de la respuesta
+          if (response && Array.isArray(response)) {
+            // Intentar extraer las motos según la estructura
+            const motos = response.map(item => {
+              if (item.moto) {
+                return item.moto;
+              } else if (item.motosPorMarca && item.motosPorMarca.v) {
+                return item.motosPorMarca.v;
+              } else {
+                return item; // Devolver el item tal cual si no tiene estructura esperada
+              }
+            });
+            console.log('Motos procesadas:', motos);
+            return motos;
+          }
+          console.error('Formato de respuesta inesperado:', response);
+          return [];
+        })
+      );
+  }
+
   getMotoPorMarca(marca: string): Observable<Motocicleta[]> {
     return this.httpClient.get<Motocicleta[]>(`${this.baseUrl}/${marca}`);
   }
