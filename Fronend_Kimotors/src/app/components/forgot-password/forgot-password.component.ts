@@ -38,30 +38,25 @@ export class ForgotPasswordComponent implements OnInit {
     this.message = '';
     this.errorMessage = '';
 
-    if (this.forgotPasswordForm.invalid) return;
+    if (this.forgotPasswordForm.invalid) {
+      this.errorMessage = 'Por favor, verifica los datos ingresados.';
+      return;
+    }
 
     this.loading = true;
     const { email } = this.forgotPasswordForm.value;
 
     try {
       await this.authFirebaseService.sendPasswordResetEmail(email);
-      this.message = 'Se ha enviado un enlace para restablecer tu contraseña.';
+      // No necesitamos establecer un mensaje aquí ya que el servicio maneja las notificaciones
+      this.forgotPasswordForm.reset();
+      this.submitted = false;
     } catch (error: any) {
-      console.error('Error al enviar el email de restablecimiento:', error);
-
-      switch (error.code) {
-        case 'auth/user-not-found':
-          this.errorMessage = 'No existe un usuario con ese correo.';
-          break;
-        case 'auth/invalid-email':
-          this.errorMessage = 'El correo electrónico ingresado no es válido.';
-          break;
-        case 'auth/too-many-requests':
-          this.errorMessage = 'Demasiados intentos. Intenta más tarde.';
-          break;
-        default:
-          this.errorMessage = 'Ocurrió un error al enviar el correo. Intenta nuevamente.';
+      // Solo manejamos errores específicos de validación del formulario
+      if (error.code === 'auth/invalid-email') {
+        this.errorMessage = 'El formato del correo electrónico no es válido.';
       }
+      // Los demás errores ya son manejados por el servicio
     } finally {
       this.loading = false;
     }

@@ -25,16 +25,16 @@ export class AuthFirebaseService {
     private auth: Auth,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   private async handleAuthError(error: any, provider: string): Promise<void> {
     console.error(`Error al autenticar con ${provider}:`, error);
-    
+
     if (error.code === 'auth/account-exists-with-different-credential') {
       const email = error.customData?.email;
       let cred;
-      
-      switch(provider) {
+
+      switch (provider) {
         case 'Google':
           cred = GoogleAuthProvider.credentialFromError(error);
           break;
@@ -52,7 +52,7 @@ export class AuthFirebaseService {
         const otherProviders = ['Google', 'Facebook', 'GitHub']
           .filter(p => p !== provider)
           .join(' o ');
-        
+
         this.toastr.warning(
           `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con ${otherProviders}.`
         );
@@ -65,7 +65,7 @@ export class AuthFirebaseService {
 
   private async handleSuccessfulLogin(result: UserCredential, provider: string): Promise<void> {
     this.toastr.success(`Inicio de sesión con ${provider} exitoso`);
-    
+
     if (this.pendingCred) {
       await linkWithCredential(result.user, this.pendingCred);
       this.toastr.success(`${this.pendingToLink} vinculado correctamente`);
@@ -75,7 +75,7 @@ export class AuthFirebaseService {
 
     await this.router.navigate(['/home']);
   }
-  
+
   private async checkAndHandleExistingSession(): Promise<void> {
     if (this.isAuthenticated) {
       const confirmLogout = window.confirm('Ya hay una sesión activa. ¿Desea cerrar la sesión actual e iniciar una nueva?');
@@ -119,7 +119,7 @@ export class AuthFirebaseService {
       await this.handleAuthError(error, 'Facebook');
     }
   }
-  
+
   // LOGIN CON GITHUB
   async loginWithGithub(): Promise<void> {
     try {
@@ -141,15 +141,29 @@ export class AuthFirebaseService {
     try {
       await this.checkAndHandleExistingSession();
       const result = await signInWithEmailAndPassword(this.auth, email, password);
-      this.toastr.success('Inicio de sesión exitoso');
-      this.router.navigate(['/home']);
+
+      // Verificar si el usuario existe en Firebase
+      if (result.user) {
+        this.toastr.success('Inicio de sesión exitoso');
+        await this.router.navigate(['/home']);
+      } else {
+        this.toastr.error('Usuario no encontrado');
+        await this.logout();
+        return;
+      }
+
     } catch (error: any) {
       if (error.message === 'login_cancelled') {
         this.toastr.info('Inicio de sesión cancelado');
         return;
       }
-      console.error('Error al iniciar sesión con email:', error);
-      this.toastr.error('Error al iniciar sesión con email');
+
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        this.toastr.error('Credenciales incorrectas');
+      } else {
+        console.error('Error al iniciar sesión con email:', error);
+        this.toastr.error('Error al iniciar sesión con email');
+      }
       throw error;
     }
   }
@@ -199,8 +213,28 @@ export class AuthFirebaseService {
   }
 
   // Enviar email de recuperación
-  sendPasswordResetEmail(email: string): Promise<void> {
-    return sendPasswordResetEmail(this.auth, email);
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    const confirmar = window.confirm(
+      `ADVERTENCIA: Si esta cuenta está vinculada con proveedores sociales (Google, Facebook, GitHub):\n\n` +
+      `Al restablecer la contraseña, las vinculaciones con estos proveedores se perderán por razones de seguridad.\n` +
+      `Después de restablecer la contraseña, necesitarás volver a vincular estos proveedores desde tu perfil.\n\n` +
+      `¿Deseas continuar con el restablecimiento de contraseña?`
+    );
+    
+    if (!confirmar) {
+      this.toastr.info('Restablecimiento de contraseña cancelado');
+      return;
+    }
+    
+    try {
+      // Solo procedemos con el envío si el usuario confirmó
+      await sendPasswordResetEmail(this.auth, email);
+      this.toastr.success('Se ha enviado un correo para restablecer la contraseña');
+    } catch (error) {
+      console.error('Error al enviar el email de recuperación:', error);
+      this.toastr.error('Error al enviar el email de recuperación');
+      throw error;
+    }
   }
 
   // Confirmar nueva contraseña

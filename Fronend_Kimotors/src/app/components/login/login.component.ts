@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
   // Iniciar sesión con Facebook
   async loginWithFacebook() {
     await this.authFirebaseService.loginWithFacebook();
-  }
+  }
 
   get f() {
     return this.loginForm.controls;
@@ -59,28 +59,28 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
 
     try {
+      // Primero intentamos autenticar con Firebase
+      await this.authFirebaseService.loginWithEmail(email, password);
+      
+      // Si la autenticación con Firebase es exitosa, procedemos con MongoDB
       const user = await this.authService.getUserByEmail(email).toPromise();
 
-      //  Verificar si el usuario es undefined
       if (!user) {
-        alert('Usuario no encontrado');
+        alert('Usuario no encontrado en MongoDB');
         return;
       }
 
-      //  Verificar si la contraseña es correcta
       if (user.password !== password) {
         alert('Contraseña incorrecta');
         return;
       }
 
-      //  Guardar el usuario en el LocalStorage (persistir sesión)
       localStorage.setItem('currentUser', JSON.stringify(user));
-
-      this.router.navigate(['/home']); // Redirige a la página principal
+      this.router.navigate(['/home']);
 
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      alert('Error al iniciar sesión');
+      // No mostramos alert aquí ya que authFirebaseService ya maneja los mensajes de error
     }
   }
 }
