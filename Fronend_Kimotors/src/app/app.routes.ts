@@ -21,7 +21,7 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password-manual', component: ResetPasswordManualComponent },
   { path: 'tarjeta-moto', component: TarjetaMotoComponent },
-  { path: 'user-porfile', component: UserProfileComponent },
+  { path: 'user-profile', component: UserProfileComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: '**', redirectTo: '' }
 ];

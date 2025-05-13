@@ -5,6 +5,8 @@
     top: 0;
     z-index: 100;
     border-bottom: 1px solid rgba(148, 173, 199, 0.2);
+    display: flex;
+    justify-content: center;
 }
 
 .nav-container {
@@ -15,6 +17,9 @@
     white-space: nowrap;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    max-width: 1200px;
+    width: 100%;
+    justify-content: center;
 }
 
 .nav-container::-webkit-scrollbar {
