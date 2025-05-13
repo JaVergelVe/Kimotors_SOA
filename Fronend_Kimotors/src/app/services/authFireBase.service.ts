@@ -54,12 +54,11 @@ export class AuthFirebaseService {
           .join(' o ');
         
         this.toastr.warning(
-          `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con ${otherProviders}.`,
-          '⚠️ Cuenta existente: '
+          `La cuenta con ${email} ya existe con otro proveedor. Por favor, inicia sesión con ${otherProviders}.`
         );
       }
     } else {
-      this.toastr.error(`Error al iniciar sesión con ${provider}`, '❌ Error: ');
+      this.toastr.error(`Error al iniciar sesión con ${provider}`);
       throw error;
     }
   }
@@ -142,7 +141,7 @@ export class AuthFirebaseService {
     try {
       await this.checkAndHandleExistingSession();
       const result = await signInWithEmailAndPassword(this.auth, email, password);
-      this.toastr.success('Inicio de sesión exitoso', '✔️ Bienvenido');
+      this.toastr.success('Inicio de sesión exitoso');
       this.router.navigate(['/home']);
     } catch (error: any) {
       if (error.message === 'login_cancelled') {
@@ -150,7 +149,7 @@ export class AuthFirebaseService {
         return;
       }
       console.error('Error al iniciar sesión con email:', error);
-      this.toastr.error('Error al iniciar sesión con email', '❌ Fallo');
+      this.toastr.error('Error al iniciar sesión con email');
       throw error;
     }
   }
@@ -174,10 +173,10 @@ export class AuthFirebaseService {
   async logout(): Promise<void> {
     try {
       await this.auth.signOut();
-      this.toastr.success('Sesión cerrada exitosamente', '✔️ Hasta pronto');
+      this.toastr.success('Sesión cerrada exitosamente');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
-      this.toastr.error('Error al cerrar sesión', '❌ Fallo');
+      this.toastr.error('Error al cerrar sesión');
     }
   }
 
@@ -187,14 +186,14 @@ export class AuthFirebaseService {
       const currentUser = this.auth.currentUser;
       if (currentUser) {
         await deleteUser(currentUser);
-        this.toastr.success('Cuenta eliminada exitosamente', '✅ Adiós');
+        this.toastr.success('Cuenta eliminada exitosamente');
         this.router.navigate(['/']);
       } else {
         throw new Error('No hay un usuario autenticado');
       }
     } catch (error) {
       console.error('Error al eliminar la cuenta:', error);
-      this.toastr.error('No se pudo eliminar la cuenta', '❌ Error');
+      this.toastr.error('No se pudo eliminar la cuenta');
       throw error;
     }
   }

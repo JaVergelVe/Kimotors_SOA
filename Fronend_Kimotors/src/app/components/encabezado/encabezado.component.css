@@ -15,6 +15,12 @@
     align-items: center;
 }
 
+.division:first-child {
+    flex: 1;
+    justify-content: center;
+    gap: 30px;
+}
+
 .logo {
     display: flex;
     gap: 8px;
@@ -47,7 +53,7 @@
     background-color: #2B3B49;
     color: #B0D4EF;
     font-size: 14px;
-    width: 200px;
+    width: 300px; /* Aumentamos un poco el ancho */
     transition: all 0.3s ease;
 }
 
@@ -78,14 +84,12 @@ a:hover {
     border-color: #94ADC7;
 }
 
-/* Estilo específico para enlaces activos */
 a.active {
     background-color: #2B3B49;
     border-color: #B0D4EF;
     color: #B0D4EF;
 }
 
-/* Asegurarse de que el estilo active también funcione para el botón versus */
 .rutversus.active {
     background-color: #2B3B49;
     border-color: #B0D4EF;
@@ -120,6 +124,11 @@ a.active {
 
     .division {
         gap: 10px;
+    }
+
+    .division:first-child {
+        justify-content: space-between; /* En móvil, ajustamos el espacio */
+        gap: 15px;
     }
 
     .buscador {
