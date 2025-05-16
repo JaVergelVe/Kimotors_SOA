@@ -1,24 +1,25 @@
 <div class="padre2">
     <div class="padre">
-        @for (motoSeccion of motoService.motos; track $index) {
-
-            <section class="caja">
-            <h3 class="h3">{{motoSeccion[0].marca}}</h3>
-
-                <div class="secciones">
-                    @for (motoDetalle of motoSeccion; track $index) {
-
-                    <div class="contenedor">
-                        <img src="{{motoDetalle.imagenes[0]}}" alt="" class="foticos">
-                        <h2 class="h">{{motoDetalle.modelo}}</h2>
-                        <p class=" parrafo">{{motoDetalle.marca}}</p>
-                        <p class="parrafo">{{motoDetalle.precio_aprox}}</p>
-                        <a href=""> Ver mas.</a>
+        @if (motos$ | async; as motosObj) {
+            @for (marca of getKeys(motosObj); track marca) {
+                <section class="caja">
+                    <h3 class="h3">{{marca}}</h3>
+                    <div class="secciones">
+                        @for (moto of getMotosPorMarca(motosObj, marca); track moto.modelo) {
+                            <div class="contenedor">
+                                <img [src]="moto.imagenes[0]" 
+                                     [alt]="moto.modelo" 
+                                     class="foticos"
+                                     loading="lazy">
+                                <h2 class="h">{{moto.modelo}}</h2>
+                                <p class="parrafo">{{moto.marca}}</p>
+                                <p class="parrafo">{{moto.precio_aprox}}</p>
+                                <a [routerLink]="['/moto', moto.marca, moto.modelo]">Ver más</a>
+                            </div>
+                        }
                     </div>
-                }
-                </div>
-            </section>
+                </section>
+            }
         }
-
     </div>
 </div>

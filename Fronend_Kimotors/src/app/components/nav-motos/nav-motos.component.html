@@ -1,0 +1,10 @@
+<nav class="nav-motos">
+  <div class="nav-container">
+    <button 
+      *ngFor="let seccion of secciones" 
+      [class.active]="seccionActual === seccion.id"
+      (click)="cambiarSeccion(seccion.id)">
+      {{seccion.nombre}}
+    </button>
+  </div>
+</nav>

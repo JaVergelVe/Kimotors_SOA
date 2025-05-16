@@ -1,16 +1,14 @@
 /* Estilos generales para el contenedor de Toast */
 /* Asegura que las notificaciones siempre aparezcan en la parte superior */
 .toast-container {
-  top: 20px !important; /* Ajusta la distancia desde la parte superior */
-  z-index: 9999 !important;
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 999999 !important;
 }
 
 .toast-top-center {
-  top: 20px !important; /* Esta es la clave para colocarlas en la parte superior */
-}
-
-.toast-container {
-  z-index: 9999 !important; /* Asegurarse de que los mensajes no se tapen */
+  top: 20px !important;
 }
 
 /* Estilos personalizados para el mensaje de éxito */
@@ -452,7 +450,7 @@ iframe,
 embed,
 object {
   display: block; /* 1 */
-  vertical-align: middle; /* 2 */
+  /* Removed vertical-align since it has no effect with display: block */
 }
 
 /*
