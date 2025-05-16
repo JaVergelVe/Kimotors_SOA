@@ -97,13 +97,12 @@
     text-align: center;
     font-weight: 600;
 }
-.secciones{
-    display: flex;
-    gap: 5px;
-    justify-items: center;
-    align-items: start;
-    max-width: 2000px;
-    background-color: blue;
+.secciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+    padding: 10px;
 }
 
 .parrafo {
@@ -171,4 +170,3 @@ a:hover {
         font-size: 24px;
     }
 }
-

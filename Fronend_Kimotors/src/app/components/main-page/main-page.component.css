@@ -2,15 +2,9 @@
     min-height: 100vh;
     background-color: #1A252E;
 }
-.contenido{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    max-width: 1000px;
-    width: 100%;
-    background-color: blueviolet;
-    margin: 10px;
+.contenido {
+    padding: 20px;
+    transition: all 0.3s ease;
 }
 
 .todas-motos {

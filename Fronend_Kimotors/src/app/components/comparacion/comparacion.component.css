@@ -1,0 +1,31 @@
+.grande {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.contenedor {
+  background-color: #93b6d2;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #1E2B36; /* azul claro */
+  border-radius: 10px;
+}
+.imagen {
+  height: 130px;
+  width: 150px;
+}
+.espacios {
+  padding: 10px;
+}
+p {
+  font-family: "Times New Roman", Times, serif;
+}
+.foto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
