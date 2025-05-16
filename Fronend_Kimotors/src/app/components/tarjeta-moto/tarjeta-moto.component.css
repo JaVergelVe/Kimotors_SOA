@@ -36,7 +36,8 @@ a{
     justify-items: center;
     align-items: start;
     max-width: 2000px;
-    background-color: red;
+    background-color: blue;
+
 }
 .foticos{
     height: 200px;
@@ -47,4 +48,5 @@ a{
     flex-direction: column;
     align-items: center;
     align-items: center;
+    gap: 5px;
 }
