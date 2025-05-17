@@ -31,7 +31,7 @@
   border: 1px solid #1e2b36; /* azul claro */
   border-radius: 10px;
   align-items: center;
-  gap: 100px;
+  gap: 10px;
 }
 .div2 {
   flex: 1.5 0 0;
@@ -60,4 +60,9 @@
 }
 .buscar::placeholder {
   color: #ffffff; /* Cambia este valor por el color que desees */
+}
+.boton{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
