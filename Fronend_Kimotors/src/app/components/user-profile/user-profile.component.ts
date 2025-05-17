@@ -6,6 +6,19 @@ import { AuthFirebaseService } from '../../services/authFireBase.service';
 import { User as FirebaseUser } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+interface FirebaseUserInfo {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  providerData: {
+    providerId: string;
+    email: string | null;
+    displayName: string | null;
+    photoURL: string | null;
+  }[];
+}
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -14,7 +27,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './user-profile.component.css',
 })
 export class UserProfileComponent implements OnInit {
-  user: User | FirebaseUser | null = null;
+  user: User | FirebaseUserInfo | null = null;
   username: string | null = null;
   isMongoUser = false;
 
@@ -42,14 +55,16 @@ export class UserProfileComponent implements OnInit {
   }
 
   getUserInfo(): void {
-    const currentUser = this.authService.getCurrentUser();
-    if (currentUser && 'displayName' in currentUser) {
-      this.user = currentUser;
-      this.username = currentUser.displayName || 'Usuario de Google';
+    // Primero intentamos obtener el usuario de Firebase
+    const firebaseUser = this.authFirebaseService.getCurrentUserInfo();
+    if (firebaseUser) {
+      this.user = firebaseUser as FirebaseUserInfo;
+      this.username = firebaseUser.displayName || 'Usuario de Firebase';
       this.isMongoUser = false;
       return;
     }
 
+    // Si no hay usuario de Firebase, intentamos con MongoDB
     const localUser = localStorage.getItem('currentUser');
     if (localUser) {
       const parsedUser: User = JSON.parse(localUser);
@@ -61,6 +76,17 @@ export class UserProfileComponent implements OnInit {
 
     console.warn('No hay un usuario autenticado.');
     this.router.navigate(['/login']);
+  }
+
+  getUserEmail(): string {
+    if (!this.user) return 'N/A';
+    
+    if (this.isMongoUser) {
+      return this.user.email || 'N/A';
+    } else {
+      const firebaseUser = this.user as any;
+      return firebaseUser.email || firebaseUser.providerData?.[0]?.email || 'N/A';
+    }
   }
 
   async logout(): Promise<void> {
