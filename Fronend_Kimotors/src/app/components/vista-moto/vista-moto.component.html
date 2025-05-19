@@ -86,8 +86,8 @@
                 </div>
             </div>
             <div class="separador"></div>
-            <button (click)="agregarAFavoritos()" class="btn-favorito">
-                Agregar a Favoritos
+            <button class="btn-favorito" (click)="toggleFavoritos()">
+                {{ estaEnFavoritos ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
             </button>
         </div>
     </div>

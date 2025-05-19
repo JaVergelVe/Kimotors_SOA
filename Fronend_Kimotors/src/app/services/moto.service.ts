@@ -89,6 +89,12 @@ export interface MotoFavoritaResponse {
   motocicleta: Motocicleta;
 }
 
+export interface MotoNombreCompleto {
+  marca: string;
+  modelo: string;
+  fullName: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -223,5 +229,20 @@ export class MotoService {
     return this.httpClient.delete<string>(
       `${this.baseUrlFavoritos}/favoritos/eliminar/${email}/${modelo}`
     );
+  }
+
+  buscarPorTexto(texto: string): Observable<Motocicleta[]> {
+    return this.httpClient.get<any[]>(`${this.baseUrl}/buscar/${texto}`).pipe(
+      map(response => {
+        if (response && Array.isArray(response)) {
+          return response.map(item => item.motocicleta);
+        }
+        return [];
+      })
+    );
+  }
+
+  nombreCompletoMotos(): Observable<MotoNombreCompleto[]> {
+    return this.httpClient.get<MotoNombreCompleto[]>(`${this.baseUrl}/nombre-completo`);
   }
 }

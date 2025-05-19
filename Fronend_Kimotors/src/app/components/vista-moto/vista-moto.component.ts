@@ -16,6 +16,7 @@ export class VistaMotoComponent implements OnInit {
   indiceImagen: number = 0;
   datosMotor?: DatosMotorResponse;
   mostrarDatosMotor: boolean = false;
+  estaEnFavoritos: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class VistaMotoComponent implements OnInit {
       const marca = params['marca'];
       const modelo = params['modelo'];
       this.cargarDetallesMoto(marca, modelo);
+      this.verificarSiEstaEnFavoritos(modelo);
     });
   }
 
@@ -57,10 +59,27 @@ export class VistaMotoComponent implements OnInit {
     this.mostrarDatosMotor = !this.mostrarDatosMotor;
   }
 
-  agregarAFavoritos() {
+  verificarSiEstaEnFavoritos(modelo: string) {
+    const localUser = localStorage.getItem('currentUser');
+    if (localUser) {
+      const parsedUser = JSON.parse(localUser);
+      if (parsedUser?.email) {
+        this.motoService.getMotosFavoritas(parsedUser.email).subscribe({
+          next: (motos) => {
+            this.estaEnFavoritos = motos.some(moto => moto.modelo === modelo);
+          },
+          error: (error) => {
+            console.error('Error al verificar favoritos:', error);
+          }
+        });
+      }
+    }
+  }
+
+  toggleFavoritos() {
     const localUser = localStorage.getItem('currentUser');
     if (!localUser) {
-      alert('Debes iniciar sesión para agregar a favoritos');
+      alert('Debes iniciar sesión para gestionar favoritos');
       return;
     }
 
@@ -73,18 +92,38 @@ export class VistaMotoComponent implements OnInit {
     const encodedEmail = encodeURIComponent(parsedUser.email);
     const encodedModelo = encodeURIComponent(this.moto.modelo);
 
-    this.motoService.agregarAFavoritos(encodedEmail, encodedModelo).subscribe({
-      next: () => {
-        alert('Moto agregada a favoritos exitosamente');
-      },
-      error: (error) => {
-        if (error.status === 200) {
-          alert('Moto agregada a favoritos exitosamente');
-        } else {
-          console.error('Error al agregar a favoritos:', error);
-          alert('Error al agregar la moto a favoritos');
+    if (this.estaEnFavoritos) {
+      this.motoService.eliminarDeFavoritos(encodedEmail, encodedModelo).subscribe({
+        next: () => {
+          this.estaEnFavoritos = false;
+          alert('Moto eliminada de favoritos exitosamente');
+        },
+        error: (error) => {
+          if (error.status === 200) {
+            this.estaEnFavoritos = false;
+            alert('Moto eliminada de favoritos exitosamente');
+          } else {
+            console.error('Error al eliminar de favoritos:', error);
+            alert('Error al eliminar la moto de favoritos');
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.motoService.agregarAFavoritos(encodedEmail, encodedModelo).subscribe({
+        next: () => {
+          this.estaEnFavoritos = true;
+          alert('Moto agregada a favoritos exitosamente');
+        },
+        error: (error) => {
+          if (error.status === 200) {
+            this.estaEnFavoritos = true;
+            alert('Moto agregada a favoritos exitosamente');
+          } else {
+            console.error('Error al agregar a favoritos:', error);
+            alert('Error al agregar la moto a favoritos');
+          }
+        }
+      });
+    }
   }
 }

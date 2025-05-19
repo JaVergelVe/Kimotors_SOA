@@ -248,3 +248,15 @@
 .btn-favorito:active {
     transform: translateY(0);
 }
+
+/* Estilos para cuando la moto está en favoritos */
+.btn-favorito.en-favoritos {
+    background-color: #2B3B49;
+    color: #ff6b6b;
+    border: 2px solid #ff6b6b;
+}
+
+.btn-favorito.en-favoritos:hover {
+    background-color: #ff6b6b;
+    color: #2B3B49;
+}
