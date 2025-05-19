@@ -59,28 +59,43 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
 
     try {
-      // Primero intentamos autenticar con Firebase
-      await this.authFirebaseService.loginWithEmail(email, password);
-      
-      // Si la autenticación con Firebase es exitosa, procedemos con MongoDB
-      const user = await this.authService.getUserByEmail(email).toPromise();
-
-      if (!user) {
-        alert('Usuario no encontrado en MongoDB');
-        return;
-      }
-
-      if (user.password !== password) {
-        alert('Contraseña incorrecta');
-        return;
-      }
-
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      this.router.navigate(['/home']);
-
+      // Intentar primero con MongoDB
+      this.authService.getUserByEmail(email).subscribe({
+        next: (user) => {
+          if (user && user.password === password) {
+            // Si la autenticación con MongoDB es exitosa
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.router.navigate(['/home']);
+            return;
+          }
+          
+          // Si MongoDB falla, intentar con Firebase
+          this.authFirebaseService.loginWithEmail(email, password)
+            .then(() => {
+              // Éxito con Firebase
+              this.router.navigate(['/home']);
+            })
+            .catch((error) => {
+              console.error('Error en autenticación con Firebase:', error);
+              alert('Credenciales incorrectas');
+            });
+        },
+        error: (error) => {
+          console.error('Error al verificar en MongoDB:', error);
+          // Si hay error con MongoDB, intentar con Firebase
+          this.authFirebaseService.loginWithEmail(email, password)
+            .then(() => {
+              this.router.navigate(['/home']);
+            })
+            .catch((firebaseError) => {
+              console.error('Error en autenticación con Firebase:', firebaseError);
+              alert('Error en la autenticación');
+            });
+        }
+      });
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      // No mostramos alert aquí ya que authFirebaseService ya maneja los mensajes de error
+      console.error('Error general en el inicio de sesión:', error);
+      alert('Error en el inicio de sesión');
     }
   }
 }

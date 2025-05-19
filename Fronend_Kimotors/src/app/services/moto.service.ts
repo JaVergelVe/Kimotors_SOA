@@ -85,11 +85,16 @@ export interface DatosMotorResponse {
   modelo: string;
 }
 
+export interface MotoFavoritaResponse {
+  motocicleta: Motocicleta;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class MotoService {
   private baseUrl = 'http://localhost:8080/motocicletas';
+  private baseUrlFavoritos = 'http://localhost:8080/usuarios';
   private httpClient = inject(HttpClient);
   private motosSubject = new BehaviorSubject<MotosResponse['motocicletas']>({});
   motos$ = this.motosSubject.asObservable();
@@ -191,5 +196,32 @@ export class MotoService {
   // Propiedad para acceder al valor actual de las motos
   get motos(): MotosResponse['motocicletas'] {
     return this.motosSubject.value;
+  }
+
+  // Método para obtener las motos favoritas de un usuario
+  getMotosFavoritas(email: string): Observable<Motocicleta[]> {
+    return this.httpClient.get<any[]>(`${this.baseUrlFavoritos}/favoritos/${email}`).pipe(
+      map(response => {
+        if (response && Array.isArray(response)) {
+          return response.map(item => item.motocicleta as Motocicleta);
+        }
+        return [];
+      })
+    );
+  }
+
+  // Método para agregar una moto a favoritos
+  agregarAFavoritos(email: string, modelo: string): Observable<string> {
+    return this.httpClient.post<string>(
+      `${this.baseUrlFavoritos}/favoritos/agregar/${email}/${modelo}`,
+      {}
+    );
+  }
+
+  // Método para eliminar una moto de favoritos
+  eliminarDeFavoritos(email: string, modelo: string): Observable<string> {
+    return this.httpClient.delete<string>(
+      `${this.baseUrlFavoritos}/favoritos/eliminar/${email}/${modelo}`
+    );
   }
 }

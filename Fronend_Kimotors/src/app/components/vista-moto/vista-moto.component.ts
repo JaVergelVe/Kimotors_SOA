@@ -56,4 +56,35 @@ export class VistaMotoComponent implements OnInit {
     }
     this.mostrarDatosMotor = !this.mostrarDatosMotor;
   }
+
+  agregarAFavoritos() {
+    const localUser = localStorage.getItem('currentUser');
+    if (!localUser) {
+      alert('Debes iniciar sesión para agregar a favoritos');
+      return;
+    }
+
+    const parsedUser = JSON.parse(localUser);
+    if (!parsedUser?.email || !this.moto?.modelo) {
+      console.error('Falta información necesaria');
+      return;
+    }
+
+    const encodedEmail = encodeURIComponent(parsedUser.email);
+    const encodedModelo = encodeURIComponent(this.moto.modelo);
+
+    this.motoService.agregarAFavoritos(encodedEmail, encodedModelo).subscribe({
+      next: () => {
+        alert('Moto agregada a favoritos exitosamente');
+      },
+      error: (error) => {
+        if (error.status === 200) {
+          alert('Moto agregada a favoritos exitosamente');
+        } else {
+          console.error('Error al agregar a favoritos:', error);
+          alert('Error al agregar la moto a favoritos');
+        }
+      }
+    });
+  }
 }
