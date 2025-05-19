@@ -225,3 +225,38 @@
         padding: 15px;
     }
 }
+
+.btn-favorito {
+    width: 100%;
+    background-color: #2B3B49;
+    color: #B0D4EF;
+    border: 2px solid #B0D4EF;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+    margin: 15px 0;
+}
+
+.btn-favorito:hover {
+    background-color: #B0D4EF;
+    color: #2B3B49;
+    transform: translateY(-2px);
+}
+
+.btn-favorito:active {
+    transform: translateY(0);
+}
+
+/* Estilos para cuando la moto está en favoritos */
+.btn-favorito.en-favoritos {
+    background-color: #2B3B49;
+    color: #ff6b6b;
+    border: 2px solid #ff6b6b;
+}
+
+.btn-favorito.en-favoritos:hover {
+    background-color: #ff6b6b;
+    color: #2B3B49;
+}
