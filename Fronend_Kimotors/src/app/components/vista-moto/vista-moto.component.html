@@ -85,6 +85,10 @@
                     <p>{{moto.precio_aprox}}</p>
                 </div>
             </div>
+            <div class="separador"></div>
+            <button class="btn-favorito" (click)="toggleFavoritos()">
+                {{ estaEnFavoritos ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
+            </button>
         </div>
     </div>
 </div>

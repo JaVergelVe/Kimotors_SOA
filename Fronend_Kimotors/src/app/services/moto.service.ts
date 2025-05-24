@@ -85,11 +85,22 @@ export interface DatosMotorResponse {
   modelo: string;
 }
 
+export interface MotoFavoritaResponse {
+  motocicleta: Motocicleta;
+}
+
+export interface MotoNombreCompleto {
+  marca: string;
+  modelo: string;
+  fullName: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class MotoService {
   private baseUrl = 'http://localhost:8080/motocicletas';
+  private baseUrlFavoritos = 'http://localhost:8080/usuarios';
   private httpClient = inject(HttpClient);
   private motosSubject = new BehaviorSubject<MotosResponse['motocicletas']>({});
   motos$ = this.motosSubject.asObservable();

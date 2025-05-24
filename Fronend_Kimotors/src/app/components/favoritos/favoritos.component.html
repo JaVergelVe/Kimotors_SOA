@@ -1,1 +1,24 @@
-<p>favoritos works!</p>
+<div class="favoritos-container">
+  <div class="motos-grid" *ngIf="motosFavoritas$ | async as motos">
+    <div class="moto-card" *ngFor="let moto of motos">
+      <div class="moto-imagen">
+        <img [src]="moto.imagenes[0]" [alt]="moto.modelo">
+      </div>
+      <div class="moto-info">
+        <h3>{{moto.marca}} {{moto.modelo}}</h3>
+        <p class="precio">{{moto.precio_aprox}}</p>
+        <p>{{moto.datos_motor.cilindraje}} cc</p>
+        <p>{{moto.datos_motor.potencia}}</p>
+        <div class="acciones">
+          <button [routerLink]="['/moto', moto.marca, moto.modelo]" class="btn-ver">Ver Detalles</button>
+          <button (click)="eliminarDeFavoritos(moto.modelo)" class="btn-eliminar">Eliminar de Favoritos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mensaje-vacio" *ngIf="(motosFavoritas$ | async)?.length === 0">
+    <p>No tienes motos favoritas aún.</p>
+    <a routerLink="/" class="btn-explorar">Explorar Motos</a>
+  </div>
+</div>
