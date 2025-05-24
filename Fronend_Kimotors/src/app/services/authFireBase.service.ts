@@ -154,6 +154,11 @@ export class AuthFirebaseService {
     try {
       await this.checkAndHandleExistingSession();
       const provider = new GithubAuthProvider();
+      provider.addScope('user');
+      provider.addScope('email');
+      provider.setCustomParameters({
+        'allow_signup': 'true'
+      });
       const result = await signInWithPopup(this.auth, provider);
       await this.handleSuccessfulLogin(result, 'GitHub');
     } catch (error: any) {
