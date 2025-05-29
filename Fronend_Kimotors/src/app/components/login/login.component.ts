@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, LoginRecord } from '../../services/auth.service';
 import { AuthFirebaseService } from '../../services/authFireBase.service';
 
 @Component({
@@ -65,6 +65,20 @@ export class LoginComponent implements OnInit {
           if (user && user.password === password) {
             // Si la autenticación con MongoDB es exitosa
             localStorage.setItem('currentUser', JSON.stringify(user));
+
+            // Registrar la actividad de inicio de sesión
+            const loginRecord: LoginRecord = {
+              username: user.username,
+              email: user.email,
+              provider: 'mongodb',
+              loginTimestamp: new Date(),
+              activityType: 'login'
+            };
+
+            this.authService.registerLoginActivity(loginRecord).subscribe({
+              error: (error) => console.error('Error al registrar actividad de inicio de sesión:', error)
+            });
+
             this.router.navigate(['/home']);
             return;
           }
