@@ -111,6 +111,7 @@ export class UserProfileComponent implements OnInit {
     } else {
       this.authService.deleteUser(email).subscribe({
         next: () => {
+          alert('Usuario eliminado exitosamente.');
           localStorage.removeItem('currentUser');
           this.router.navigate(['/']);
         },

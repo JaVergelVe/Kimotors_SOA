@@ -16,6 +16,7 @@ import {
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService, LoginRecord } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFirebaseService {
@@ -26,7 +27,8 @@ export class AuthFirebaseService {
     private auth: Auth,
     private router: Router,
     private toastr: ToastrService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private authService: AuthService
   ) { 
     this.initializeAuthListener();
   }
@@ -74,6 +76,19 @@ export class AuthFirebaseService {
         this.toastr.warning('No se pudo obtener el correo electrónico del usuario');
         return;
       }
+
+      // Registrar la actividad de inicio de sesión
+      const loginRecord: LoginRecord = {
+        username: displayName || 'Usuario de Firebase',
+        email: email,
+        provider: provider,
+        loginTimestamp: new Date(),
+        activityType: 'login'
+      };
+
+      this.authService.registerLoginActivity(loginRecord).subscribe({
+        error: (error) => console.error('Error al registrar actividad de inicio de sesión:', error)
+      });
 
       // Generamos una contraseña temporal segura
       const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!';
@@ -237,6 +252,26 @@ export class AuthFirebaseService {
   // Cerrar sesión
   async logout(): Promise<void> {
     try {
+      const currentUser = this.auth.currentUser;
+      if (currentUser) {
+        const email = currentUser.email || currentUser.providerData[0]?.email;
+        const displayName = currentUser.displayName || currentUser.providerData[0]?.displayName || email?.split('@')[0];
+        
+        if (email) {
+          const logoutRecord: LoginRecord = {
+            username: displayName || 'Usuario de Firebase',
+            email: email,
+            provider: currentUser.providerData[0]?.providerId || 'unknown',
+            loginTimestamp: new Date(),
+            activityType: 'logout'
+          };
+
+          this.authService.registerLoginActivity(logoutRecord).subscribe({
+            error: (error) => console.error('Error al registrar actividad de cierre de sesión:', error)
+          });
+        }
+      }
+
       this.clearSessionTimer();
       await this.auth.signOut();
       this.toastr.success('Sesión cerrada exitosamente');
