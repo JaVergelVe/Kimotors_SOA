@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, LoginRecord } from '../../services/auth.service';
 import { AuthFirebaseService } from '../../services/authFireBase.service';
 
 @Component({
@@ -34,11 +34,21 @@ export class LoginComponent implements OnInit {
     await this.authFirebaseService.loginWithGoogle();
   }
 
+  // Iniciar sesión con GitHub
+  async loginWithGithub() {
+    await this.authFirebaseService.loginWithGithub();
+  }
+
+  // Iniciar sesión con Facebook
+  async loginWithFacebook() {
+    await this.authFirebaseService.loginWithFacebook();
+  }
+
   get f() {
     return this.loginForm.controls;
   }
 
-  //  Iniciar sesión con email y contraseña
+  // Iniciar sesión con email y contraseña (MongoDB)
   async onSubmit() {
     this.submitted = true;
 
@@ -49,28 +59,57 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
 
     try {
-      const user = await this.authService.getUserByEmail(email).toPromise();
+      // Intentar primero con MongoDB
+      this.authService.getUserByEmail(email).subscribe({
+        next: (user) => {
+          if (user && user.password === password) {
+            // Si la autenticación con MongoDB es exitosa
+            localStorage.setItem('currentUser', JSON.stringify(user));
 
-      //  Verificar si el usuario es undefined
-      if (!user) {
-        alert('Usuario no encontrado');
-        return;
-      }
+            // Registrar la actividad de inicio de sesión
+            const loginRecord: LoginRecord = {
+              username: user.username,
+              email: user.email,
+              provider: 'mongodb',
+              loginTimestamp: new Date(),
+              activityType: 'login'
+            };
 
-      //  Verificar si la contraseña es correcta
-      if (user.password !== password) {
-        alert('Contraseña incorrecta');
-        return;
-      }
+            this.authService.registerLoginActivity(loginRecord).subscribe({
+              error: (error) => console.error('Error al registrar actividad de inicio de sesión:', error)
+            });
 
-      //  Guardar el usuario en el LocalStorage (persistir sesión)
-      localStorage.setItem('currentUser', JSON.stringify(user));
-
-      this.router.navigate(['/home']); // Redirige a la página principal
-
+            this.router.navigate(['/home']);
+            return;
+          }
+          
+          // Si MongoDB falla, intentar con Firebase
+          this.authFirebaseService.loginWithEmail(email, password)
+            .then(() => {
+              // Éxito con Firebase
+              this.router.navigate(['/home']);
+            })
+            .catch((error) => {
+              console.error('Error en autenticación con Firebase:', error);
+              alert('Credenciales incorrectas');
+            });
+        },
+        error: (error) => {
+          console.error('Error al verificar en MongoDB:', error);
+          // Si hay error con MongoDB, intentar con Firebase
+          this.authFirebaseService.loginWithEmail(email, password)
+            .then(() => {
+              this.router.navigate(['/home']);
+            })
+            .catch((firebaseError) => {
+              console.error('Error en autenticación con Firebase:', firebaseError);
+              alert('Error en la autenticación');
+            });
+        }
+      });
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      alert('Error al iniciar sesión');
+      console.error('Error general en el inicio de sesión:', error);
+      alert('Error en el inicio de sesión');
     }
   }
 }

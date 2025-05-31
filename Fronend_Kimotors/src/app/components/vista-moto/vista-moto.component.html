@@ -1,67 +1,94 @@
-<div class="vista-moto">
-
-
+<div class="vista-moto" *ngIf="moto">
     <div class="rd">
         <div class="read">
             <div class="fotog">
-                hola
+                <img [src]="imagenActual" [alt]="moto.modelo" class="imagen-principal">
             </div>
             <div class="fotov">
-                <div class="foto2">1</div>
-                <div class="foto2">2</div>
-                <div class="foto2">3</div>
+                @for (imagen of moto.imagenes; track imagen; let i = $index) {
+                    <div class="foto2" 
+                         [class.activa]="i === indiceImagen"
+                         (click)="cambiarImagen(i)">
+                        <img [src]="imagen" [alt]="moto.modelo + ' imagen ' + (i + 1)">
+                    </div>
+                }
             </div>
             <div class="moto">
-                <h4>MARCA</h4>
-                <H4>MODELO</H4>
+                <h4>{{moto.marca}}</h4>
+                <h4>{{moto.modelo}}</h4>
             </div>
-            <p class="p1">anno</p>
-            <h3 class="esp">ESPECIFICACIONES :</h3>
+            <p class="p1">{{moto.anio}}</p>
+            <h3 class="esp">ESPECIFICACIONES:</h3>
             <div class="separador"></div>
             <div class="dato">
                 <div class="cont">
-                    <p class="p1">motor</p>
-                    <p>cilindraje disposicion cilindros distribucion valvulas por cilindro</p>
-                </div>
-                <div class="cont">
-                    <p class="p1">transmision</p>
-                    <p>embrague accionamiento</p>
+                    <p class="p1">Motor</p>
+                    <button class="boton-motor" (click)="toggleDatosMotor()">
+                        {{ mostrarDatosMotor ? 'Ocultar detalles del motor' : 'Ver detalles del motor' }}
+                    </button>
+                    
+                    @if (mostrarDatosMotor && datosMotor) {
+                        <div class="datos-motor-detallados">
+                            <p>Cilindraje: {{datosMotor.datos_motor.cilindraje}} cc</p>
+                            <p>Disposición: {{datosMotor.datos_motor.disposicion}}</p>
+                            <p>Cilindros: {{datosMotor.datos_motor.cilindros}}</p>
+                            <p>Distribución: {{datosMotor.datos_motor.distribucion}}</p>
+                            <p>Válvulas por cilindro: {{datosMotor.datos_motor.valvulas_por_cilindro}}</p>
+                            <p>Refrigeración: {{datosMotor.datos_motor.refrigeracion}}</p>
+                            <p>Compresión: {{datosMotor.datos_motor.compresion}}</p>
+                            <p>Potencia: {{datosMotor.datos_motor.potencia}}</p>
+                            <p>Torque: {{datosMotor.datos_motor.torque}}</p>
+                        </div>
+                    }
                 </div>
             </div>
-            <div class="separador"></div>
-            <div class="dato">
-                <div class="cont">
-                    <p class="p1">suspension</p>
-                    <p>delantera trasera</p>
-                </div>
-                <div class="cont">
-                    <p class="p1">frenos</p>
-                    <p>delantero trasero</p>
-                </div>
-            </div>
-            <div class="separador"></div>
-            <div class="dato">
-                <div class="cont">
-                    <p class="p1">ruedas</p>
-                    <p>delantera trasera</p>
-                </div>
-                <div class="cont">
-                    <p class="p1">dimensiones</p>
-                    <p>capacidad de deposito peso consumo</p>
-                </div>
+            <div class="cont">
+                <p class="p1">Transmisión</p>
+                <p>Embrague: {{moto.transmision.embrague}}</p>
+                <p>Accionamiento: {{moto.transmision.accionamiento}}</p>
             </div>
             <div class="separador"></div>
             <div class="dato">
                 <div class="cont">
-                    <p class="p1">electronica</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed cupiditate amet tenetur
-                    </p>
+                    <p class="p1">Suspensión</p>
+                    <p>Delantera: {{moto.suspension.delantera}}</p>
+                    <p>Trasera: {{moto.suspension.trasera}}</p>
                 </div>
                 <div class="cont">
-                    <p class="p1">precio</p>
-                    <p>$$$$$$$</p>
+                    <p class="p1">Frenos</p>
+                    <p>Delantero: {{moto.frenos.delantero}}</p>
+                    <p>Trasero: {{moto.frenos.trasero}}</p>
                 </div>
             </div>
+            <div class="separador"></div>
+            <div class="dato">
+                <div class="cont">
+                    <p class="p1">Ruedas</p>
+                    <p>Delantera: {{moto.ruedas.delantera}}</p>
+                    <p>Trasera: {{moto.ruedas.trasera}}</p>
+                </div>
+                <div class="cont">
+                    <p class="p1">Dimensiones</p>
+                    <p>Capacidad depósito: {{moto.dimensiones.capacidad_deposito}} L</p>
+                    <p>Peso: {{moto.dimensiones.peso}} kg</p>
+                    <p>Consumo: {{moto.consumo}}</p>
+                </div>
+            </div>
+            <div class="separador"></div>
+            <div class="dato">
+                <div class="cont">
+                    <p class="p1">Electrónica</p>
+                    <p>{{moto.electronica}}</p>
+                </div>
+                <div class="cont">
+                    <p class="p1">Precio</p>
+                    <p>{{moto.precio_aprox}}</p>
+                </div>
+            </div>
+            <div class="separador"></div>
+            <button class="btn-favorito" (click)="toggleFavoritos()">
+                {{ estaEnFavoritos ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
+            </button>
         </div>
     </div>
 </div>

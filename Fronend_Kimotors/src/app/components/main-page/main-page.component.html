@@ -1,3 +1,15 @@
-<div class="separador"></div>
-
-<app-tarjeta-moto></app-tarjeta-moto>
+<div class="cuerpo">
+    <app-nav-motos (seccionCambiada)="cambiarSeccion($event)"></app-nav-motos>
+    
+    <div class="contenido">
+        @if (seccionActual === 'todas') {
+            <app-todas-motos></app-todas-motos>
+        } @else if (seccionActual === 'marcas') {
+            <app-tarjeta-moto></app-tarjeta-moto>
+        } @else if (seccionActual === 'precio') {
+            <app-motos-precio></app-motos-precio>
+        } @else if (seccionActual === 'cilindraje') {
+            <app-motos-cilindraje></app-motos-cilindraje>
+        }
+    </div>
+</div>

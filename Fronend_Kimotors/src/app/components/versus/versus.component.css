@@ -1,57 +1,68 @@
-header{
-    display: flex;
-    gap: 10px;
-    background-color: aquamarine;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    flex-direction: column;
-    width: 100%;
-    box-sizing: border-box;
+
+.vm {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #1A252E;
 }
-.vm{
-    gap: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.vs {
+  display: flex;
+  margin: 0 1%;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #1e2b36; /* azul claro */
+  border-radius: 10px;
 }
-.vs{
-    display: flex;
-    margin: 0 1%;
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-}
-.contsvg{
-    cursor: pointer;
+.contsvg {
+  cursor: pointer;
 }
 
-.div1{
-    flex: 1 0 0;
-    background-color: #E3DAC9;
-    display: flex;
-    gap: 1px;
-    flex-direction: column;
-    max-width: 350px;
-    /*
+.div1 {
+  flex: 1 0 0;
+  background-color: #93b6d2;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #1e2b36; /* azul claro */
+  border-radius: 10px;
+  align-items: center;
+  gap: 10px;
+}
+.div2 {
+  flex: 1.5 0 0;
+  background-color: #f09a87;
+  border: 1px solid #1e2b36; /* azul claro */
+  border-radius: 10px;
+  padding: 15px;
+  /*
     box-sizing: border-box;
     */
 }
-.div2{
-    flex: 1.5 0 0;
-    background-color: #f09a87;
-    /*
-    box-sizing: border-box;
-    */
+
+.caracteristicas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.foto{
-    background: #000;
-    height: 100px;
+.buscar{
+    background-color: #6E94B4;
+    border-radius: 15px;
+    color: black;
+    border-color: 	#7DA5C7;
+    box-shadow: none;
+    margin-top: 30px;
 }
-.caracteristicas{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.buscar::placeholder {
+  color: #ffffff; /* Cambia este valor por el color que desees */
+}
+.boton{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }

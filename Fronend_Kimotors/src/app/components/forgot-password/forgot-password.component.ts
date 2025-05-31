@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthFirebaseService } from '../../services/authFireBase.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,46 +15,50 @@ export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm!: FormGroup;
   submitted = false;
   message: string = '';
+  errorMessage: string = '';
+  loading = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authFirebaseService: AuthFirebaseService
+  ) {}
 
   ngOnInit() {
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmNewPassword: ['', [Validators.required, Validators.minLength(6)]],
-    }, { validators: this.passwordMatchValidator });
-  }
-
-  // Función para validar que las contraseñas coincidan
-  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('newPassword')?.value;
-    const confirmPassword = control.get('confirmNewPassword')?.value;
-    return password === confirmPassword ? null : { passwordMismatch: true };
+    });
   }
 
   get f() {
     return this.forgotPasswordForm.controls;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
-  
+    this.message = '';
+    this.errorMessage = '';
+
     if (this.forgotPasswordForm.invalid) {
-      console.log('Errores en el formulario', this.forgotPasswordForm.errors);
+      this.errorMessage = 'Por favor, verifica los datos ingresados.';
       return;
     }
-  
-    const { email, newPassword } = this.forgotPasswordForm.value;
-  
-    this.authService.updatePassword(email, newPassword).subscribe({
-      next: () => {
-        setTimeout(() => this.router.navigate(['/login']));
-      },
-      error: (err) => {
-        this.message = 'Error al actualizar la contraseña: ' + (err.error?.message || 'Inténtalo de nuevo.');
-        console.error(err);
-      },
-    });
+
+    this.loading = true;
+    const { email } = this.forgotPasswordForm.value;
+
+    try {
+      await this.authFirebaseService.sendPasswordResetEmail(email);
+      // No necesitamos establecer un mensaje aquí ya que el servicio maneja las notificaciones
+      this.forgotPasswordForm.reset();
+      this.submitted = false;
+    } catch (error: any) {
+      // Solo manejamos errores específicos de validación del formulario
+      if (error.code === 'auth/invalid-email') {
+        this.errorMessage = 'El formato del correo electrónico no es válido.';
+      }
+      // Los demás errores ya son manejados por el servicio
+    } finally {
+      this.loading = false;
+    }
   }
 }

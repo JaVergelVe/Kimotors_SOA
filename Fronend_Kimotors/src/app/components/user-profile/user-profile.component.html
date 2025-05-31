@@ -1,14 +1,100 @@
 <div class="user-info-container">
-    <h2>Información del Usuario</h2>
-  
-    <div class="user-detail">
-      <p><strong>Nombre:</strong> {{ username || 'N/A' }}</p>
-      <p><strong>Correo:</strong> {{ user?.email }}</p>
+  <div class="profile-card">
+    <div class="profile-header">
+      <h2>Información del Usuario</h2>
+      <div class="user-detail">
+        <div class="info-group">
+          <div class="info-item">
+            <span class="info-label">Nombre:</span>
+            <span class="info-value">{{ username || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Correo:</span>
+            <span class="info-value">
+              {{ getUserEmail() }}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
-  
-    <button (click)="logout()">Cerrar Sesión</button>
 
-    <button (click)="deleteUser()">Eliminar Cuenta</button>
-  
-    <button (click)="navigateToHome()">Ir al Inicio</button>
+    <div class="action-buttons primary-actions">
+      <button (click)="navigateToHome()" class="btn-primary">
+        <i class="fas fa-home"></i> Ir al Inicio
+      </button>
+      <button (click)="logout()" class="btn-secondary">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+
+    <!-- Formulario de cambio de contraseña SOLO para usuarios MongoDB -->
+    <div *ngIf="isMongoUser" class="password-section">
+      <div class="section-header">
+        <h3>Cambiar Contraseña</h3>
+      </div>
+      
+      <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePassword()">
+        <div class="form-group">
+          <label for="currentPassword">Contraseña actual:</label>
+          <input
+            type="password"
+            id="currentPassword"
+            formControlName="currentPassword"
+            placeholder="Ingresa tu contraseña actual"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">Nueva contraseña:</label>
+          <input
+            type="password"
+            id="newPassword"
+            formControlName="newPassword"
+            placeholder="Ingresa tu nueva contraseña"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar nueva contraseña:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirma tu nueva contraseña"
+            required
+          />
+        </div>
+
+        <div *ngIf="changePasswordForm.errors?.['passwordMismatch'] && changePasswordForm.touched" 
+             class="invalid-feedback">
+          Las contraseñas no coinciden.
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" 
+                  [disabled]="changePasswordForm.invalid"
+                  class="btn-update">
+            Actualizar Contraseña
+          </button>
+        </div>
+      </form>
+
+      <div class="feedback-container">
+        <p *ngIf="errorMessage" class="invalid-feedback">
+          <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+        </p>
+        <p *ngIf="successMessage" class="success-feedback">
+          <i class="fas fa-check-circle"></i> {{ successMessage }}
+        </p>
+      </div>
+    </div>
+
+    <div class="danger-zone">
+      <button (click)="deleteUser()" class="btn-danger">
+        <i class="fas fa-trash-alt"></i> Eliminar Cuenta
+      </button>
+    </div>
+  </div>
 </div>

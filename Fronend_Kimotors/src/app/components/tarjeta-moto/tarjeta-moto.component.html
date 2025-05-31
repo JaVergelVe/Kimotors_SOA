@@ -1,10 +1,25 @@
 <div class="padre2">
     <div class="padre">
-        <div class="contenedor">
-            <div class="a">foto</div>
-            <h2 class="h">Marca Modelo</h2>
-            <p class=" parrafo">Marca</p>
-            <p class="parrafo">Precio</p>
-        </div>
+        @if (motos$ | async; as motosObj) {
+            @for (marca of getKeys(motosObj); track marca) {
+                <section class="caja">
+                    <h3 class="h3">{{marca}}</h3>
+                    <div class="secciones">
+                        @for (moto of getMotosPorMarca(motosObj, marca); track moto.modelo) {
+                            <div class="contenedor">
+                                <img [src]="moto.imagenes[0]" 
+                                     [alt]="moto.modelo" 
+                                     class="foticos"
+                                     loading="lazy">
+                                <h2 class="h">{{moto.modelo}}</h2>
+                                <p class="parrafo">{{moto.marca}}</p>
+                                <p class="parrafo">{{moto.precio_aprox}}</p>
+                                <a [routerLink]="['/moto', moto.marca, moto.modelo]">Ver más</a>
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+        }
     </div>
 </div>

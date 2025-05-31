@@ -3,51 +3,89 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { AuthFirebaseService } from '../../services/authFireBase.service';
-import { User as FirebaseUser } from '@angular/fire/auth';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+interface FirebaseUserInfo {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  providerData: {
+    providerId: string;
+    email: string | null;
+    displayName: string | null;
+    photoURL: string | null;
+  }[];
+}
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css',
 })
 export class UserProfileComponent implements OnInit {
-  user: User | FirebaseUser | null = null;
+  user: User | FirebaseUserInfo | null = null;
   username: string | null = null;
+  isMongoUser = false;
 
-  constructor(private authService: AuthService, private authFirebaseService: AuthFirebaseService, private router: Router) {}
+  showChangePassword = false;
+  changePasswordForm: FormGroup;
+
+  successMessage = '';
+  errorMessage = '';
+
+  constructor(
+    private authService: AuthService,
+    private authFirebaseService: AuthFirebaseService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.changePasswordForm = this.fb.group({
+      currentPassword: ['', Validators.required],
+      newPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+    }, { validators: this.passwordsMatchValidator });
+  }
 
   ngOnInit(): void {
     this.getUserInfo();
   }
 
   getUserInfo(): void {
-    // Intentamos obtener el usuario autenticado de Firebase (Google)
-    const currentUser = this.authService.getCurrentUser();
-    if (currentUser) {
-      this.user = currentUser;
-
-      // Si es un usuario de Google (Firebase), usamos displayName
-      if ('displayName' in currentUser) {
-        this.username = currentUser.displayName || 'Usuario de Google';
-      }
-
+    // Primero intentamos obtener el usuario de Firebase
+    const firebaseUser = this.authFirebaseService.getCurrentUserInfo();
+    if (firebaseUser) {
+      this.user = firebaseUser as FirebaseUserInfo;
+      this.username = firebaseUser.displayName || 'Usuario de Firebase';
+      this.isMongoUser = false;
       return;
     }
 
-    // Si no es un usuario de Google, buscamos en localStorage (correo/contraseña)
+    // Si no hay usuario de Firebase, intentamos con MongoDB
     const localUser = localStorage.getItem('currentUser');
     if (localUser) {
       const parsedUser: User = JSON.parse(localUser);
       this.user = parsedUser;
       this.username = parsedUser.username;
+      this.isMongoUser = true;
       return;
     }
 
-    // Si no hay un usuario autenticado, redirigimos al login
     console.warn('No hay un usuario autenticado.');
     this.router.navigate(['/login']);
+  }
+
+  getUserEmail(): string {
+    if (!this.user) return 'N/A';
+    
+    if (this.isMongoUser) {
+      return this.user.email || 'N/A';
+    } else {
+      const firebaseUser = this.user as any;
+      return firebaseUser.email || firebaseUser.providerData?.[0]?.email || 'N/A';
+    }
   }
 
   async logout(): Promise<void> {
@@ -57,42 +95,72 @@ export class UserProfileComponent implements OnInit {
   }
 
   async deleteUser(): Promise<void> {
-    if (!this.user || !this.user.email) {
-      console.error('No se encontró un email válido.');
-      return;
-    }
-  
+    if (!this.user || !this.user.email) return;
+
     const email = this.user.email;
-  
-    // Verifica si el usuario proviene de Firebase
-    const isGoogleUser = 'providerData' in this.user && this.user.providerData.some(provider => provider.providerId === 'google.com');
-  
-    console.log('Eliminando usuario con email:', email);
-    console.log('Es usuario de Google:', isGoogleUser);
-  
-    if (isGoogleUser) {
-      // Eliminar cuenta de Firebase
+    const isFirebaseUser = 'providerData' in this.user && this.user.providerData.length > 0;
+
+    if (isFirebaseUser) {
       try {
         await this.authFirebaseService.deleteFirebaseUser();
-        console.log('Usuario eliminado de Firebase exitosamente.');
         localStorage.removeItem('currentUser');
         this.router.navigate(['/']);
       } catch (error) {
         console.error('Error al eliminar usuario de Firebase:', error);
       }
     } else {
-      // Eliminar usuario de MongoDB
       this.authService.deleteUser(email).subscribe({
         next: () => {
-          console.log('Usuario eliminado de MongoDB exitosamente.');
+          alert('Usuario eliminado exitosamente.');
           localStorage.removeItem('currentUser');
           this.router.navigate(['/']);
         },
-        error: (err) => {
-          console.error('Error en la eliminación del usuario en MongoDB:', err);
-        },
+        error: (err) => console.error('Error al eliminar usuario MongoDB:', err),
       });
     }
+  }
+
+  toggleChangePassword(): void {
+    this.showChangePassword = !this.showChangePassword;
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.changePasswordForm.reset();
+  }
+
+  passwordsMatchValidator(group: FormGroup) {
+    const newPass = group.get('newPassword')?.value;
+    const confirmPass = group.get('confirmPassword')?.value;
+    return newPass === confirmPass ? null : { passwordMismatch: true };
+  }
+
+  onChangePassword(): void {
+    if (!this.user || !('email' in this.user) || !this.user.email) {
+      this.errorMessage = 'Error: Usuario no válido o sin correo electrónico.';
+      return;
+    }
+  
+    const email = this.user.email;
+    const { currentPassword, newPassword } = this.changePasswordForm.value;
+  
+    this.authService.login(email, currentPassword).subscribe({
+      next: () => {
+        this.authService.updatePassword(email, newPassword).subscribe({
+          next: () => {
+            this.successMessage = 'Contraseña actualizada exitosamente.';
+            this.errorMessage = '';
+            this.changePasswordForm.reset();
+          },
+          error: () => {
+            this.errorMessage = 'Error al actualizar la contraseña.';
+            this.successMessage = '';
+          }
+        });
+      },
+      error: () => {
+        this.errorMessage = 'La contraseña actual es incorrecta.';
+        this.successMessage = '';
+      }
+    });
   }
 
   navigateToHome() {

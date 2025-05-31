@@ -1,0 +1,14 @@
+<div class="contenedor-motos">
+    @if (motos$ | async; as motos) {
+        @for (moto of motos; track moto.modelo) {
+            <div class="moto-card">
+                <img [src]="moto.imagenes[0]" [alt]="moto.modelo" class="moto-imagen">
+                <h3>{{moto.modelo}}</h3>
+                <p>{{moto.marca}}</p>
+                <p class="cilindraje">{{moto.datos_motor.cilindraje}} cc</p>
+                <p class="precio">{{moto.precio_aprox}}</p>
+                <a [routerLink]="['/moto', moto.marca, moto.modelo]">Ver más</a>
+            </div>
+        }
+    }
+</div>
