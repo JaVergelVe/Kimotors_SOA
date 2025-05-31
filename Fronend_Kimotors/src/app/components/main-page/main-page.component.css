@@ -2,10 +2,9 @@
     min-height: 100vh;
     background-color: #1A252E;
 }
-
 .contenido {
     padding: 20px;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .todas-motos {

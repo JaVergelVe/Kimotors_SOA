@@ -11,6 +11,7 @@ import { TarjetaMotoComponent } from './components/tarjeta-moto/tarjeta-moto.com
 import { ResetPasswordManualComponent } from './components/reset-password-manual/reset-password-manual.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { LoginRecordsComponent } from './components/login-records/login-records.component';
+import { ComparacionComponent } from './components/comparacion/comparacion.component';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent, pathMatch: 'full' },
@@ -25,5 +26,6 @@ export const routes: Routes = [
   { path: 'user-profile', component: UserProfileComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: 'usuarios', component: LoginRecordsComponent},
+  { path: 'comparacion', component: ComparacionComponent},
   { path: '**', redirectTo: '' }
 ];

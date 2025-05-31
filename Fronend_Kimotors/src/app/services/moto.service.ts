@@ -203,46 +203,4 @@ export class MotoService {
   get motos(): MotosResponse['motocicletas'] {
     return this.motosSubject.value;
   }
-
-  // Método para obtener las motos favoritas de un usuario
-  getMotosFavoritas(email: string): Observable<Motocicleta[]> {
-    return this.httpClient.get<any[]>(`${this.baseUrlFavoritos}/favoritos/${email}`).pipe(
-      map(response => {
-        if (response && Array.isArray(response)) {
-          return response.map(item => item.motocicleta as Motocicleta);
-        }
-        return [];
-      })
-    );
-  }
-
-  // Método para agregar una moto a favoritos
-  agregarAFavoritos(email: string, modelo: string): Observable<string> {
-    return this.httpClient.post<string>(
-      `${this.baseUrlFavoritos}/favoritos/agregar/${email}/${modelo}`,
-      {}
-    );
-  }
-
-  // Método para eliminar una moto de favoritos
-  eliminarDeFavoritos(email: string, modelo: string): Observable<string> {
-    return this.httpClient.delete<string>(
-      `${this.baseUrlFavoritos}/favoritos/eliminar/${email}/${modelo}`
-    );
-  }
-
-  buscarPorTexto(texto: string): Observable<Motocicleta[]> {
-    return this.httpClient.get<any[]>(`${this.baseUrl}/buscar/${texto}`).pipe(
-      map(response => {
-        if (response && Array.isArray(response)) {
-          return response.map(item => item.motocicleta);
-        }
-        return [];
-      })
-    );
-  }
-
-  nombreCompletoMotos(): Observable<MotoNombreCompleto[]> {
-    return this.httpClient.get<MotoNombreCompleto[]>(`${this.baseUrl}/nombre-completo`);
-  }
 }
