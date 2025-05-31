@@ -88,4 +88,8 @@ export class AuthService {
     };
     return this.http.post(`http://localhost:8080/api/login-records`, formattedRecord);
   }
+
+  getAllLoginRecords(): Observable<LoginRecord[]> {
+    return this.http.get<LoginRecord[]>(`http://localhost:8080/api/login-records`)
+  }
 }
