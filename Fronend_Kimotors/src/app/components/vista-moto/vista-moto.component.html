@@ -89,6 +89,22 @@
             <button class="btn-favorito" (click)="toggleFavoritos()">
                 {{ estaEnFavoritos ? 'Eliminar de favoritos' : 'Agregar a favoritos' }}
             </button>
+            <div class="separador"></div>
+            <div class="comentarios-section">
+                <h3>Comentarios</h3>
+
+                <div class="comentario-form">
+                    <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe tu comentario..."></textarea>
+                    <button (click)="enviarComentario()">Enviar</button>
+                </div>
+
+                <div class="comentario" *ngFor="let c of comentarios">
+                    <p class="comentario-email"><strong>{{ c.userEmail }}</strong> dijo:</p>
+                    <p class="comentario-contenido">{{ c.texto }}</p>
+                    <p class="comentario-fecha">{{ c.fecha | date:'short' }}</p>
+                    <hr>
+                </div>
+            </div>
         </div>
     </div>
 </div>

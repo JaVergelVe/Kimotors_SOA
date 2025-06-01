@@ -91,6 +91,22 @@
       </div>
     </div>
 
+    <div *ngIf="comentarios.length > 0; else sinComentarios">
+      <h2 class="titulo-comentarios">🗨️ Tus Comentarios</h2>
+    
+      <div *ngFor="let comentario of comentarios" class="comentario-card">
+        <div class="comentario-header">
+          <span class="moto-info">🏍️ {{comentario.motoMarca}} {{comentario.motoModelo}}</span>
+          <button class="btn-eliminar" (click)="eliminarComentario(comentario.id)">🗑️ Eliminar</button>
+        </div>
+        <p class="comentario-texto">💬 {{comentario.texto}}</p>
+      </div>
+    </div>
+    
+    <ng-template #sinComentarios>
+      <p class="comentario-vacio">No has hecho comentarios aún.</p>
+    </ng-template>
+
     <div class="danger-zone">
       <button (click)="deleteUser()" class="btn-danger">
         <i class="fas fa-trash-alt"></i> Eliminar Cuenta
