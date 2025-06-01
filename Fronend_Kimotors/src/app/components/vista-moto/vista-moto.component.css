@@ -260,3 +260,47 @@
     background-color: #ff6b6b;
     color: #2B3B49;
 }
+
+.comentarios-section {
+    margin-top: 20px;
+    background-color: #2a3a47;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.comentario-form textarea {
+    width: 100%;
+    min-height: 80px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 8px;
+    border: none;
+    resize: vertical;
+}
+
+.comentario-form button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.comentario {
+    margin-top: 10px;
+}
+
+.comentario-email {
+    font-weight: bold;
+    color: #B0D4EF;
+}
+
+.comentario-contenido {
+    margin: 5px 0;
+}
+
+.comentario-fecha {
+    font-size: 0.85em;
+    color: #ccc;
+}

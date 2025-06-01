@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { DatosMotorResponse, MotoService, Motocicleta } from '../../services/moto.service';
+import { Comentario, ComentarioService } from '../../services/comentarios.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-vista-moto',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './vista-moto.component.html',
   styleUrl: './vista-moto.component.css'
 })
@@ -17,10 +19,13 @@ export class VistaMotoComponent implements OnInit {
   datosMotor?: DatosMotorResponse;
   mostrarDatosMotor: boolean = false;
   estaEnFavoritos: boolean = false;
+  comentarios: Comentario[] = [];
+  nuevoComentario: string = '';
 
   constructor(
     private route: ActivatedRoute,
-    private motoService: MotoService
+    private motoService: MotoService,
+    private comentarioService: ComentarioService
   ) {}
 
   ngOnInit() {
@@ -35,8 +40,49 @@ export class VistaMotoComponent implements OnInit {
   cargarDetallesMoto(marca: string, modelo: string) {
     this.motoService.getAllMotos().subscribe(motos => {
       this.moto = motos.find(m => m.marca === marca && m.modelo === modelo);
-      if (this.moto && this.moto.imagenes.length > 0) {
-        this.imagenActual = this.moto.imagenes[0];
+      if (this.moto) {
+        if (this.moto.imagenes.length > 0) {
+          this.imagenActual = this.moto.imagenes[0];
+        }
+        this.cargarComentarios(marca, modelo);
+      } else {
+        console.warn('Moto no encontrada con marca y modelo:', marca, modelo);
+      }
+    });
+  }
+
+  cargarComentarios(marca: string, modelo: string) {
+    this.comentarioService.obtenerComentariosPorMoto(marca, modelo).subscribe({
+      next: (comentarios) => this.comentarios = comentarios,
+      error: (error) => console.error('Error al cargar comentarios:', error)
+    });
+  }
+  
+  enviarComentario() {
+    const localUser = localStorage.getItem('currentUser');
+    if (!localUser) {
+      alert('Debes iniciar sesión para comentar');
+      return;
+    }
+  
+    const usuario = JSON.parse(localUser);
+    if (!usuario.email || !this.nuevoComentario.trim() || !this.moto) return;
+  
+    const comentario: Comentario = {
+      texto: this.nuevoComentario.trim(),
+      userEmail: usuario.email,
+      motoMarca: this.moto.marca,
+      motoModelo: this.moto.modelo,
+      fecha: new Date().toISOString() // Opcional, si no lo genera el backend
+    };
+    
+    this.comentarioService.agregarComentario(comentario).subscribe({
+      next: (nuevoComentario) => {
+        this.comentarios.push(nuevoComentario); // Esto está bien
+        this.nuevoComentario = '';
+      },
+      error: (error) => {
+        console.error('Error al agregar comentario:', error);
       }
     });
   }

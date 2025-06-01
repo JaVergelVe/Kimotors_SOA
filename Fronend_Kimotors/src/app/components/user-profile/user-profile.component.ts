@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { AuthFirebaseService } from '../../services/authFireBase.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Comentario, ComentarioService } from '../../services/comentarios.service';
 
 interface FirebaseUserInfo {
   uid: string;
@@ -29,6 +30,8 @@ export class UserProfileComponent implements OnInit {
   user: User | FirebaseUserInfo | null = null;
   username: string | null = null;
   isMongoUser = false;
+  correoUsuario: string | null = '';
+  comentarios: Comentario[] = [];
 
   showChangePassword = false;
   changePasswordForm: FormGroup;
@@ -39,6 +42,7 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private authFirebaseService: AuthFirebaseService,
+    private comentarioService: ComentarioService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -51,6 +55,22 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserInfo();
+    this.correoUsuario = this.user?.email || '';
+    if (this.correoUsuario) {
+      this.comentarioService.obtenerComentariosPorUsuario(this.correoUsuario)
+        .subscribe((comentarios) => {
+          this.comentarios = comentarios;
+        });
+      console.log(this.comentarios);
+    }
+  }
+
+  eliminarComentario(id: any): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
+      this.comentarioService.eliminarComentario(id).subscribe(() => {
+        this.comentarios = this.comentarios.filter(c => c.id !== id);
+      });
+    }
   }
 
   getUserInfo(): void {
