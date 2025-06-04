@@ -1,5 +1,5 @@
 .padre{
-    background-color: aqua;
+    background-color: #1A252E;
     width: 100%;
 }
 .contenedor{
@@ -26,4 +26,20 @@ a{
 .contenido{
     display: flex;
     gap: 10px;
+}
+.paquete{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+}
+input::placeholder {
+  color: white; /* Cambia este valor al que quieras */
+  opacity: 1; /* Asegura que no sea muy translúcido */
+}
+input{
+    background-color: #888888;
+    border-radius: 15px;
+    padding: 5px;
 }

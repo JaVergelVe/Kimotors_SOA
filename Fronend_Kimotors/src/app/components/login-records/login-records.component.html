@@ -1,6 +1,8 @@
 <div class="padre">
-    <input type="text" placeholder="Ingresar correo" (input)="filtrarUsuario($event)">
-    <input type="date" (input)="filtrarUsuarioFecha($event)">
+    <div class="paquete">
+      <input type="text" placeholder="Ingresar correo" (input)="filtrarUsuario($event)">
+      <input type="date" (input)="filtrarUsuarioFecha($event)">
+    </div>
   <div class="contenedor">
     @for (record of loginRecords; track $index) {
     <div class="tarjeta" >

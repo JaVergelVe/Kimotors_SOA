@@ -1,7 +1,7 @@
 <div class="padre">
      <button (click)="cierre()">X</button>
   <img
-    src="https://yt3.googleusercontent.com/9IcF95gkgNJ-Zct9BaVFD1uOEhBOVFie0g43hHSt5oMFgYSxi9zJS9OyN4KYazK4QAfkHgUC6Dc=s900-c-k-c0x00ffffff-no-rj"
+    src="{{moto.imagenes[0]}}"
     alt=""
     class="imagen"
   />
@@ -11,24 +11,24 @@
   <p>{{moto.datos_motor.disposicion}}</p>
   <p>{{moto.datos_motor.cilindros}}</p>
   <p>{{moto.datos_motor.disposicion}}</p>
-  <p>Valvulas por Cilindro</p>
-  <p>Refrigeracion</p>
-  <p>Compresion</p>
-  <p>Potencia</p>
-  <p>Torque</p>
-  <p>Embrague</p>
-  <p>Accionamiento</p>
-  <p>Suspension Delantera</p>
-  <p>Suspension Trasera</p>
-  <p>Frenos Delantero</p>
-  <p>Frenos Trasero</p>
-  <p>Ruedas Delantera</p>
-  <p>Ruedas Trasera</p>
-  <p>Capacidad Deposito</p>
-  <p>Peso</p>
-  <p>Consumo</p>
-  <p>Electronica</p>
-  <p>Precio Aprox</p>
-  <p>Año</p>
+  <p>{{moto.datos_motor.valvulas_por_cilindro}}</p>
+  <p>{{moto.datos_motor.refrigeracion}}</p>
+  <p>{{moto.datos_motor.compresion}}</p>
+  <p>{{moto.datos_motor.potencia}}</p>
+  <p>{{moto.datos_motor.torque}}</p>
+  <p>{{moto.transmision.embrague}}</p>
+  <p>{{moto.transmision.accionamiento}}</p>
+  <p>{{moto.suspension.delantera}}</p>
+  <p>{{moto.suspension.trasera}}</p>
+  <p>{{moto.frenos.delantero}}</p>
+  <p>{{moto.frenos.trasero}}</p>
+  <p>{{moto.ruedas.delantera}}</p>
+  <p>{{moto.ruedas.trasera}}</p>
+  <p>{{moto.dimensiones.capacidad_deposito}}</p>
+  <p>{{moto.dimensiones.peso}}</p>
+  <p>{{moto.consumo}}</p>
+  <p>{{moto.electronica}}</p>
+  <p>{{moto.precio_aprox}}</p>
+  <p>{{moto.anio}}</p>
   <div></div>
 </div>

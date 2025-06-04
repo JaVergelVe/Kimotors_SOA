@@ -1,12 +1,12 @@
 .padre{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 3px;
     background-color: #2E3B47;
     border-radius: 10px;
     border: 1px solid #94ADC7;
     padding: 10px;
-    max-width: 500px;
+    max-width: 400px;
     width: fit-content;
     align-items: center;
 }
@@ -15,7 +15,7 @@ p{
 }
 .imagen{
     height: 100px;
-    width: 100px;
+    width: 150px;
 }
 button{
     background-color: #FF6666;
