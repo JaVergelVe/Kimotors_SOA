@@ -5,7 +5,7 @@
                 <input type="text" placeholder=" Buscar Moto" class="buscar" (input)="findMotos($event)">
                 <div class=" boton">
                     @for (moto of arreglo; track $index) {
-                    <button >
+                    <button (click)="agregarMoto(moto)">
                         {{moto.marca}}{{moto.modelo}}
                     </button>
                     }
@@ -40,7 +40,9 @@
             </div>
         </div>
         <div class="div2">
-            comparacion
+            @for (moto of arregloMotoSeleccionada; track $index) {
+                <app-motico-vs [moto]="moto" [fn]="cerrar"[index]="$index" />
+            }
         </div>
     </div>
 

@@ -1,16 +1,16 @@
 <div class="padre">
-     <button>X</button>
+     <button (click)="cierre()">X</button>
   <img
     src="https://yt3.googleusercontent.com/9IcF95gkgNJ-Zct9BaVFD1uOEhBOVFie0g43hHSt5oMFgYSxi9zJS9OyN4KYazK4QAfkHgUC6Dc=s900-c-k-c0x00ffffff-no-rj"
     alt=""
     class="imagen"
   />
-  <p>marca</p>
-  <p>modelo</p>
-  <p>Cilindraje</p>
-  <p>Disposición</p>
-  <p>Cilindros</p>
-  <p>Distribucion</p>
+  <p>{{moto.marca}}</p>
+  <p>{{moto.modelo}}</p>
+  <p>{{moto.datos_motor.cilindraje}}</p>
+  <p>{{moto.datos_motor.disposicion}}</p>
+  <p>{{moto.datos_motor.cilindros}}</p>
+  <p>{{moto.datos_motor.disposicion}}</p>
   <p>Valvulas por Cilindro</p>
   <p>Refrigeracion</p>
   <p>Compresion</p>

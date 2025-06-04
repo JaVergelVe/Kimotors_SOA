@@ -29,7 +29,7 @@ export class AuthService {
   // Validar si la contrasena corresponde al email
   login(email: string, password: string): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}/login`, { email, password });
-  }  
+  }
 
   // Obtener un usuario por su email
   getUserByEmail(email: string): Observable<User> {
@@ -69,7 +69,7 @@ export class AuthService {
 
   private formatDateTime(date: Date): string {
     const pad = (num: number) => num.toString().padStart(2, '0');
-    
+
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
     const day = pad(date.getDate());
@@ -79,7 +79,7 @@ export class AuthService {
 
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
   }
-  
+
   registerLoginActivity(loginRecord: LoginRecord): Observable<any> {
     // Formatea la fecha a un string con el formato deseado
     const formattedRecord = {

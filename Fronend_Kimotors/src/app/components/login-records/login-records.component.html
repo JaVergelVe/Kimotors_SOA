@@ -1,10 +1,16 @@
 <div class="padre">
-    <div class="contenedor">
-        <div class="tarjeta">
-            <p>username:  </p>
-            <p>email:  </p>
-            <p>actividad:  </p>
-            <p>fecha y hora:  </p>
-        </div>
+    <input type="text" placeholder="Ingresar correo" (input)="filtrarUsuario($event)">
+    <input type="date" (input)="filtrarUsuarioFecha($event)">
+  <div class="contenedor">
+    @for (record of loginRecords; track $index) {
+    <div class="tarjeta" >
+      <p>Username: {{ record.username }}</p>
+      <p>Email: {{ record.email }}</p>
+      <p>Actividad: {{ record.activityType }}</p>
+      <p>Proveedor: {{ record.provider }}</p>
+      <p>Fecha: {{ record.loginTimestamp.toString().split('T')[0]}}</p>
+      <p>Hora: {{ record.loginTimestamp.toString().split('T')[1]}}</p>
     </div>
+    }
+  </div>
 </div>
