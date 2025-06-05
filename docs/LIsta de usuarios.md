@@ -35,7 +35,7 @@ Obtiene todos los registros de actividad de inicio de sesión.
 
 ## Componente de Registros de Login
 
-El componente de registros de login (<mcfile name="login-records.component.ts" path="/e:/Universidad/SOA/Kimotors_SOA/Fronend_Kimotors/src/app/components/login-records/login-records.component.ts"></mcfile>) muestra y filtra el historial de inicios de sesión.
+El componente de registros de login muestra y filtra el historial de inicios de sesión.
 
 ### Funcionalidades Principales
 
