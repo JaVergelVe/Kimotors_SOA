@@ -1,6 +1,7 @@
 .padre{
     background-color: #1A252E;
     width: 100%;
+    min-height: 100vh;
 }
 .contenedor{
     background-color: #1A252E;
@@ -8,7 +9,6 @@
     grid-template-columns: repeat(5, 1fr);
     padding: 10px;
     gap: 10px;
-
 }
 .tarjeta{
     border-radius: 10px;
