@@ -216,3 +216,68 @@
     gap: 5px;
   }
 }
+
+.titulo-comentarios {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #B0D4EF;
+  font-weight: bold;
+  text-align: center;
+}
+
+.comentario-card {
+  background-color: #1E2A35;
+  border: 1px solid #2B3B49;
+  border-left: 4px solid #B0D4EF;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.comentario-card:hover {
+  transform: translateY(-2px);
+}
+
+.comentario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.moto-info {
+  font-weight: bold;
+  color: #94ADC7;
+  font-size: 16px;
+}
+
+.comentario-texto {
+  font-size: 15px;
+  color: #B0D4EF;
+  line-height: 1.6;
+}
+
+.btn-eliminar {
+  background-color: transparent;
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-eliminar:hover {
+  background-color: #ff6b6b;
+  color: #1A252E;
+}
+
+.comentario-vacio {
+  font-style: italic;
+  color: #94ADC7;
+  text-align: center;
+  margin-top: 20px;
+}
